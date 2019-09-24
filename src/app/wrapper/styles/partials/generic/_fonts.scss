@@ -48,6 +48,14 @@
   src: url('/static/fonts/OpenSans/OpenSans-Semibold.ttf') format('truetype');
 }
 
+// Open Sans - Semibold - 600 - italic
+@font-face {
+  font-family: 'OpenSans';
+  font-style: italic;
+  font-weight: 600;
+  src: url('/static/fonts/OpenSans/OpenSans-SemiBoldItalic.ttf') format('truetype');
+}
+
 // Open Sans - Bold - 700
 @font-face {
   font-family: 'OpenSans';
@@ -56,6 +64,7 @@
   src: url('/static/fonts/OpenSans/OpenSans-Bold.ttf') format('truetype');
 }
 
+// Open Sans - Bold - 700 - italic
 @font-face {
   font-family: 'OpenSans';
   font-style: italic;
