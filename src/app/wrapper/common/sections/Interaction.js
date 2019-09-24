@@ -195,16 +195,7 @@ define([
         });
       }
 
-      // TODO: remove testing var and resort to buttons var for length check and forEach
-      var testing = [];
-      testing.push(...buttons);
-      // testing.push(...buttons);
-      // testing.push(...buttons);
-      // testing.push(...buttons);
-      // testing.push(...buttons);
-      // testing.push(...buttons);
-
-      if (testing.length > 8) {
+      if (buttons.length > 8) {
         $('.region__heading').hide();
       } else {
         $('.region__controls').hide();
@@ -214,7 +205,7 @@ define([
        * Loop through all buttons, rather than automatically appending to the list,
        * Create NavigationButtson with each and Append them to a group (slide) in quantities of 8
        */
-      testing.forEach(function (button, index) {
+      buttons.forEach(function (button, index) {
         // Create new slide(s) for each 8 buttons
         if (index % 8 === 0) {
           var slide = document.createElement('ul');
