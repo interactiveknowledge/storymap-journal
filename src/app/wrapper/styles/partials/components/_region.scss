@@ -13,10 +13,20 @@
 
   &__copy {
     font-family: 'OpenSans', sans-serif;
-    font-size: 22px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    line-height: 43px;
+
+    &-en {
+      font-size: 22px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    &-es {
+      font-size: 24px;
+      font-style: italic;
+      font-weight: 700;
+    }
   }
 
   &__btn-prev,
@@ -32,8 +42,10 @@
 
   &__btn-prev {
     background-image: url(/static/svg/chevron-left.svg);
+    align-self: flex-start;
   }
   &__btn-next {
     background-image: url(/static/svg/chevron-right.svg);
+    align-self: flex-start;
   }
 }

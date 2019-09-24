@@ -27,6 +27,7 @@
 // Open Sans - Light - 300
 @font-face {
   font-family: 'OpenSans';
+  font-style: normal;
   font-weight: 300;
   src: url('/static/fonts/OpenSans/OpenSans-Light.ttf') format('truetype');
 }
@@ -34,6 +35,7 @@
 // Open Sans - Regular - 400
 @font-face {
   font-family: 'OpenSans';
+  font-style: normal;
   font-weight: 400;
   src: url('/static/fonts/OpenSans/OpenSans-Regular.ttf') format('truetype');
 }
@@ -41,6 +43,7 @@
 // Open Sans - Semibold - 600
 @font-face {
   font-family: 'OpenSans';
+  font-style: normal;
   font-weight: 600;
   src: url('/static/fonts/OpenSans/OpenSans-Semibold.ttf') format('truetype');
 }
@@ -48,13 +51,22 @@
 // Open Sans - Bold - 700
 @font-face {
   font-family: 'OpenSans';
+  font-style: normal;
   font-weight: 700;
   src: url('/static/fonts/OpenSans/OpenSans-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'OpenSans';
+  font-style: italic;
+  font-weight: 700;
+  src: url('/static/fonts/OpenSans/OpenSans-BoldItalic.ttf') format('truetype');
 }
 
 // Open Sans - Extrabold - 800
 @font-face {
   font-family: 'OpenSans';
+  font-style: normal;
   font-weight: 900;
   src: url('/static/fonts/OpenSans/OpenSans-ExtraBold.ttf') format('truetype');
 }

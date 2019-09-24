@@ -42,6 +42,12 @@
   }
 }
 
+.interaction__nav {
+  p {
+    margin-bottom: 50px;
+  }
+}
+
 /* Nav and Region sections */
 .interaction__nav,
 .interaction__region {
@@ -59,6 +65,5 @@
     @include font(24, 46, 'OpenSans');
     font-style: italic;
     font-weight: 600;
-    margin-bottom: 50px;
   }
 }
