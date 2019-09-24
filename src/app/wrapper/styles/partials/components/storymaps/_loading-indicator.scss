@@ -21,7 +21,7 @@
     animation: loadingShow 1.5s linear infinite;
   }
 
-  $number: 11;
+  $number: 12;
   @for $i from 1 through $number {
     .loading-#{$i} {
       animation-delay: $i * .1s;
