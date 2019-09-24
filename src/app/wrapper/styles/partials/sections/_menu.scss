@@ -1,5 +1,9 @@
-@mixin menuSvgColor ($bgColor: $black, $textColor: $white) {
+@mixin menuSvgColor ($bgColor: $black, $textColor: $white, $titleColor: $white) {
   .menu__storymap__wrapper {
+    &__title {
+      color: $titleColor;
+    }
+
     svg {
       &.fade {
         opacity: 1;
@@ -81,7 +85,7 @@
 }
 
 .cdi-caribbean {
-  @include menuSvgColor($region-3-secondary, $region-3-background);
+  @include menuSvgColor($region-3-secondary, $region-3-background, $region-3-secondary);
 }
 
 .cdi-europe {
