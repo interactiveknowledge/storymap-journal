@@ -267,7 +267,7 @@ define([
       // Set up the back button
       $('.region__list__back').html(NavigationButton({
         action: 'nav',
-        alternate: 'ver todas las regiones',
+        alternate: 'Ver todas las regiones',
         alternateLanguage: 'es',
         colorPrimary: '',
         colorSecondary: '',
