@@ -107,3 +107,31 @@
 .cdi-region-8 {
   @include menuSvgColor($region-8-secondary);
 }
+
+.what-is-leaf {
+  @include menuSvgColor($what-is-leaf-secondary);
+}
+
+.schools-streets {
+  @include menuSvgColor($schools-streets-secondary);
+}
+
+.leaf-international {
+  @include menuSvgColor($leaf-international-secondary);
+}
+
+.leaf-festival {
+  @include menuSvgColor($leaf-festival-secondary);
+}
+
+.leaf-downtown {
+  @include menuSvgColor($leaf-downtown-secondary);
+}
+
+.leaf-global {
+  @include menuSvgColor($leaf-global-secondary);
+}
+
+.more-about-leaf {
+  @include menuSvgColor($more-about-leaf-secondary);
+}
