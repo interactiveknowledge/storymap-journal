@@ -57,7 +57,7 @@
   }
 
   &.cdi-caribbean &__wrapper, &.cdi-the_caribbean &__wrapper, &.cdi-the_caribbean &__title {
-    @include modalBackground($region-3-primary, $region-2-secondary);
+    @include modalBackground($region-3-primary, $region-3-secondary);
   }
 
   &.cdi-europe &__wrapper {
