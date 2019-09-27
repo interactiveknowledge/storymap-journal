@@ -1,4 +1,4 @@
-@mixin modalBackground ($background-color: $white, $text-color: $white) {
+@mixin modalBackground ($background-color: $what-is-leaf-primary, $text-color: $white) {
   background-color: $background-color;
   color: $text-color;
 }
@@ -15,7 +15,7 @@
 
   &__wrapper {
     @include flex(column, center, flex-start);
-    background-color: $white;
+    background-color: $what-is-leaf-primary;
     background-image: url('/static/images/button-background.png');
     border-radius: 34px;
     color: $white;
