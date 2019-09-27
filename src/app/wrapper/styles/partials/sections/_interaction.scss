@@ -22,7 +22,7 @@
     text-transform: uppercase;
   }
 
-  img {
+  img, svg {
     display: block;
     margin: 0 auto;
   }
@@ -65,5 +65,46 @@
     @include font(24, 46, 'OpenSans');
     font-style: italic;
     font-weight: 600;
+  }
+}
+
+/* Animation */
+.radio-1 {
+  animation: radio 1.5s steps(4, jump-none) infinite;
+}
+
+.radio-2 {
+  animation: radioTwo 1.5s steps(3, jump-none) infinite;
+}
+
+@keyframes radio {
+  0% {
+    fill: none;
+  }
+
+  10% {
+    fill: inherit;
+  }
+
+  70% {
+    fill: inherit;
+  }
+
+  100% {
+    fill: none;
+  }
+}
+
+@keyframes radioTwo {
+  0% {
+    fill: none;
+  }
+
+  50% {
+    fill: inherit;
+  }
+
+  100% {
+    fill: none;
   }
 }
