@@ -243,6 +243,8 @@ const createLayout = (body) => {
 
   explore.section.info.h2 = getHeader(cmsContent, 'field_state_explore_translated_title')
 
+  explore.section.info.desc = getHeader(cmsContent, 'field_state_explore_desc')
+
   explore.section.info.logo = setFile(process.env.BACKEND_URL + cmsContent.field_logo.image.uri.url)
 
   if (filepath = _.get(cmsContent, 'field_state_explore_bg_img.image.uri.url', defaultAttractBgImg))

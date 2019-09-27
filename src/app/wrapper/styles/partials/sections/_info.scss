@@ -32,8 +32,27 @@
     text-align: center;
   }
 
-  .llc & img {
-    width: 395px;
+  .llc & {
+    img {
+      width: 395px;
+    }
+
+    &__content__bottom {
+      padding: 0 40px;
+
+      h1 {
+        @include font(74, 77, 'Hallo Sans');
+        font-weight: 900;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      p {
+        @include font(30, 40, 'OpenSans');
+        font-weight: 400;
+        text-align: center;
+      }
+    }
   }
 }
 
