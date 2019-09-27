@@ -225,6 +225,18 @@ define([
               bgVideo.style.opacity = 1;
             }
           }, 100);
+
+          var bgImg = $('.fullscreen-bg__img').get(0);
+          bgImg.style.opacity = 0;
+          var imgFadeInterval = setInterval(function () {
+            if (bgImg.style.opacity < 1) {
+              bgImg.style.opacity = parseFloat(bgImg.style.opacity) + 0.05;
+            } else {
+              clearInterval(imgFadeInterval);
+              bgImg.style.opacity = 1;
+            }
+          }, 100)
+
         }
       });
 

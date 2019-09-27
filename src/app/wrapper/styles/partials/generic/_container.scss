@@ -11,6 +11,7 @@
 
 /* Full Screen Video Info */
 .fullscreen-bg {
+  background-color: $black;
   position: fixed;
   top: 0;
   right: 0;
@@ -18,6 +19,16 @@
   left: 0;
   overflow: hidden;
   z-index: -100;
+}
+
+.fullscreen-bg__img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+  height: 100%;
 }
 
 .fullscreen-bg__video {
@@ -79,5 +90,15 @@
 
   #interaction {
     height: 890px;
+  }
+
+  .fullscreen-bg__img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    height: 960px;
   }
 }

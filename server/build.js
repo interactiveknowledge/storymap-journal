@@ -313,7 +313,7 @@ const createStorymaps = (body) => {
     }
 
     const storyMapImage = setFile(process.env.BACKEND_URL + storyMapImageSrc)
-    if (storymap.field_translated_id !== null && storymap.field_translated_id.length > 0)
+    if (storymap.field_translated_id !== null && storymap.field_translated_title !== null && storymap.field_translated_id.length > 0 && storymap.field_translated_title.length > 0)
       concatStorymap = { ...storymapTemplate, ...{id: storymap.field_id}, ...{uuid: storymap.id}, ...{name: storymap.field_story_map_title}, ...{language: 'en'}, ...{weight: storymap.field_weight}, ...{theme: {background: storyMapImage, color: {primary: primaryColor, secondary: secondaryColor}}}, ...{callout: {title: storymap.field_callout.field_heading, body: storymap.field_callout.body.value}}, ...{relationships: {id: storymap.field_translated_id}}, ...{titles: {primary: storymap.field_button_title, secondary: storymap.field_translated_button_title}}}
     else
       concatStorymap = { ...storymapTemplate, ...{id: storymap.field_id}, ...{uuid: storymap.id}, ...{name: storymap.field_story_map_title}, ...{language: 'en'}, ...{weight: storymap.field_weight}, ...{theme: {background: storyMapImage ,color: {primary: primaryColor, secondary: secondaryColor}}}, ...{callout: {title: storymap.field_callout.field_heading, body: storymap.field_callout.body.value}}, ...{titles: {primary: storymap.field_button_title, secondary: storymap.field_translated_button_title}}}
@@ -338,7 +338,8 @@ const createStorymaps = (body) => {
     }
     const storyMapImage = setFile(process.env.BACKEND_URL + storyMapImageSrc)
 
-    if (storymap.field_translated_id !== null && storymap.field_translated_id.length > 0) {
+    if (storymap.field_translated_id !== null && storymap.field_translated_title !== null && storymap.field_translated_id.length > 0 && storymap.field_translated_title.length > 0) {
+      console.log(storymap.title)
       concatStorymap = { ...storymapTemplate, ...{id: storymap.field_translated_id},  ...{uuid: storymap.id + '-alt'}, ...{name: storymap.field_translated_title}, ...{language: 'es'}, ...{weight: storymap.field_weight}, ...{theme: {background: storyMapImage, color: {primary: '#' + storymap.field_color, secondary: ''}}}, ...{callout: {title: storymap.field_translated_callout.field_heading, body: storymap.field_translated_callout.body.value}}, ...{relationships: {id: storymap.field_id}}, ...{titles: {primary: storymap.field_button_title, secondary: storymap.field_translated_button_title}}}
     }
 

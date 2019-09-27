@@ -31,7 +31,8 @@ define([], function () {
   // Manipulates the background.
   this.setBackground = function () {
     // Determine if the current state is using video
-    if (ik.wrapper.layout.state[this.getState()].background.video) {
+    if (ik.wrapper.layout.state[this.getState()].background.video.src &&
+      ik.wrapper.layout.state[this.getState()].background.video.src.length > 0) {
       var nextVideoDiffers = false
 
       if (this.getPrevState())
@@ -40,7 +41,7 @@ define([], function () {
       var video = $('#container video');
 
       if (ik.wrapper.state && ik.wrapper.state.get('video') === 'playing') {
-        ik.wrapper.state.set('video', 'stopped')
+        ik.wrapper.state.set('video', 'stopped');
       }
 
       var newSource = '<source src="' + ik.wrapper.layout.state[this.getState()].background.video.src + '" type="' + ik.wrapper.layout.state[this.getState()].background.video.type + '">'
@@ -56,17 +57,18 @@ define([], function () {
       }
 
       video.show();
-    }
+    } else if (ik.wrapper.layout.state[this.getState()].background.img.length > 0) {
+      ik.wrapper.state.set('video', 'stopped');
 
-    $('.fullscreen-bg').css('background', 'black');
+      var img = ik.wrapper.layout.state[this.getState()].background.img;
 
-    // If a video is used for multiple states, go ahead and play it.
-    try {
-      if ($('#container video source').length > 0) {
-        ik.wrapper.state.set('video', 'playing');
-      }
-    } catch (err) {
-      $('#container video').load();
+      var imgNode = $('.fullscreen-bg__img');
+
+      imgNode.attr('src', img);
+
+      var video = $('#container video');
+
+      video.hide();
     }
   }
 
