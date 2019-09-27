@@ -360,7 +360,7 @@ define(["lib-build/tpl!./SidePanelSection",
         }
 
         if (buttonTitle.indexOf('<') === 0) {
-          buttonTitle = nextTitle.match(/(?<=(?!h1|h2|h3|h4|h5|h6|span)\>)(.+?)(?=<\/(h1|h2|h3|h4|h5|h6|span))/g);
+          buttonTitle = nextTitle.match(/(?<=(?!h1|h2|h3|h4|h5|h6|span|p|div)\>)(.+?)(?=<\/(h1|h2|h3|h4|h5|h6|span|p|div))/g);
         }
 
         if (subtitle === undefined)  {
