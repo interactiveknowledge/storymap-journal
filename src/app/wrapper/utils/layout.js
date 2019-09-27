@@ -35,6 +35,10 @@ define([], function () {
       ik.wrapper.layout.state[this.getState()].background.video.src.length > 0) {
       var nextVideoDiffers = false
 
+      var imgNode = $('.fullscreen-bg__img');
+
+      imgNode.hide();
+
       if (this.getPrevState())
         nextVideoDiffers = ik.wrapper.layout.state[this.getState()].background.video !== ik.wrapper.layout.state[this.getPrevState()].background.video
 
@@ -65,6 +69,8 @@ define([], function () {
       var imgNode = $('.fullscreen-bg__img');
 
       imgNode.attr('src', img);
+
+      imgNode.show();
 
       var video = $('#container video');
 
