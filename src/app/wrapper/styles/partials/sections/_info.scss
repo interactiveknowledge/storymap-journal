@@ -79,6 +79,12 @@
     top: 0;
     width: 100%;
     z-index: -1;
+
+    img {
+      object-fit: cover;
+      height: 840px;
+      width: 1080px;
+    }
   }
 
   &__content {

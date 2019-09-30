@@ -149,7 +149,7 @@ define([
       if (ik.wrapper.getVersion() === 'llc') {
         $('.nav__list__explore').append(NavigationButton({
           action: 'explore',
-          alternate: 'Spanish Translation',
+          alternate: 'Explore nuestra comunidad global',
           alternateLanguage: 'es',
           colorPrimary: '#715035',
           colorSecondary: '#533B27',
