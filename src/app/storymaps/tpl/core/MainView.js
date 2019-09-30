@@ -770,6 +770,8 @@ define(["lib-build/css!./MainView",
 			{
 				console.log("tpl.core.MainView - navigateStoryToIndex - ", index);
 
+        IK.bindScrollEventsToSections();
+
 				if ( index < 0 || index > app.data.getStoryLength() - 1 )
 					return;
 
