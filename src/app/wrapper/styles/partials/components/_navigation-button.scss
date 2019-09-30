@@ -104,6 +104,8 @@
 }
 
 .nav__list {
+  justify-content: center;
+
   & li {
     & button {
       clip-path: url('#nav-button-clipping-path');
