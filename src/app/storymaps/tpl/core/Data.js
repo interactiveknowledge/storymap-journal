@@ -647,9 +647,16 @@ define(["./WebApplicationData",
 			this.getContentActions = function()
 			{
 				var actions = [];
+        var sectionLength = this.getStorySections().length;
 				$.each(this.getStorySections(), function(i, section){
 					$.each(section.contentActions, function(j, action){
-						actions.push(action);
+            if (action.id.indexOf('IK-SECTION-NEXT-') === 0) {
+              if (i < sectionLength - 1) {
+                actions.push(action);
+              }
+            } else {
+              actions.push(action);
+            }
 					});
 				});
 				return actions;
