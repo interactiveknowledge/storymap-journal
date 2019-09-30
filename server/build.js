@@ -140,8 +140,8 @@ const writeJsonToFile = (path = '', json = {}) => {fs.writeFileSync(path, JSON.s
  * @return {[String]}
  */
 const setFile = (fileuri) => {
-  const absFilepath = staticPath + '/download' + url.parse(fileuri).pathname
-  const relFilepath = '/static/download' + url.parse(fileuri).pathname
+  const absFilepath = staticPath + '/download' + decodeURIComponent(url.parse(fileuri).pathname)
+  const relFilepath = '/static/download' + decodeURIComponent(url.parse(fileuri).pathname)
 
   // @TODO - Decide if keeping this logic is necessary
   // No need to download the same file twice, if already exists
@@ -159,7 +159,7 @@ const setFile = (fileuri) => {
     responseType: 'stream'
   })
     .then((res) => {
-      const writeStream = fs.createWriteStream(decodeURI(absFilepath))
+      const writeStream = fs.createWriteStream(absFilepath)
 
       writeStream.on('open', () => {this.event.emit('add-file')})
 
