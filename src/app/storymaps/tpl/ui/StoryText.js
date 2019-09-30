@@ -162,6 +162,11 @@ define(["dojo/topic",
 						var fromKeyboard = !(evt.screenX || evt.screenY);
 						performAction(action, link, fromKeyboard);
 					});
+
+          $("div[data-storymaps=" + action.id + "]").off('click').click(function(evt){
+						var fromKeyboard = !(evt.screenX || evt.screenY);
+						performAction(action, link, fromKeyboard);
+					});
 				}
 			});
 			$("#mainStagePanel").find(".backLbl").html(i18n.viewer.mainStage.back);
