@@ -57,6 +57,10 @@
 }
 
 #sidePanel {
+  .sectionsWrapper {
+    width: 540px;
+  }
+
   .section {
     @include flex(column, normal);
     touch-action: none;
@@ -92,6 +96,8 @@
         }
 
         button {
+          width: 485px;
+
           div {
             @include font(22, 22, 'OpenSans');
             @include flex(column, flex-start, flex-start);
