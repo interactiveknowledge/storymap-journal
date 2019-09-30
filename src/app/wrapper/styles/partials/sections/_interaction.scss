@@ -70,11 +70,11 @@
 
 /* Animation */
 .radio-1 {
-  animation: radio 1.5s steps(4, jump-none) infinite;
+  animation: radio 2s steps(3, end) infinite;
 }
 
 .radio-2 {
-  animation: radioTwo 1.5s steps(3, jump-none) infinite;
+  animation: radioTwo 2s steps(4, end) infinite;
 }
 
 @keyframes radio {
@@ -82,16 +82,12 @@
     fill: none;
   }
 
-  10% {
-    fill: inherit;
-  }
-
-  70% {
+  15% {
     fill: inherit;
   }
 
   100% {
-    fill: none;
+    fill: inherit;
   }
 }
 
@@ -102,6 +98,10 @@
 
   50% {
     fill: inherit;
+  }
+
+  60% {
+    fill: none;
   }
 
   100% {
