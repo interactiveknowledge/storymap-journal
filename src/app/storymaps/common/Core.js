@@ -172,11 +172,11 @@ define(["lib-build/css!lib-app/bootstrap/css/bootstrap.min",
 
 			// Automatic login in development mode
 			if ( !isProd() && app.indexCfg.username && app.indexCfg.password) {
-				on(IdentityManager, 'dialog-create', function(){
-					on(IdentityManager.dialog, 'show', function(){
-						IdentityManager.dialog.txtUser_.set('value', app.indexCfg.username);
-						IdentityManager.dialog.txtPwd_.set('value', app.indexCfg.password);
-						IdentityManager.dialog.btnSubmit_.onClick();
+				on(ik.IdentityManager, 'dialog-create', function(){
+					on(ik.IdentityManager.dialog, 'show', function(){
+						ik.IdentityManager.dialog.txtUser_.set('value', app.indexCfg.username);
+						ik.IdentityManager.dialog.txtPwd_.set('value', app.indexCfg.password);
+						ik.IdentityManager.dialog.btnSubmit_.onClick();
 					});
 				});
 			}
@@ -212,7 +212,7 @@ define(["lib-build/css!lib-app/bootstrap/css/bootstrap.min",
 			esriConfig.defaults.io.proxyUrl = location.protocol + app.indexCfg.proxyurl;
 
 			// Allow IE9 to save over HTTP
-			IdentityManager && IdentityManager.setProtocolErrorHandler(function(){ return true; });
+			ik.IdentityManager && ik.IdentityManager.setProtocolErrorHandler(function(){ return true; });
 
 			// USE CORS to save the web app configuration during developement
 			if( app.isInBuilder && app.cfg.CORS_SERVER ) {
@@ -251,7 +251,7 @@ define(["lib-build/css!lib-app/bootstrap/css/bootstrap.min",
 			});
 
 			// Basic styling in case something isn't public
-			on(IdentityManager, "dialog-create", styleIdentityManager);
+			on(ik.IdentityManager, "dialog-create", styleIdentityManager);
 
 			topic.subscribe("CORE_UPDATE_UI", updateUI);
 			topic.subscribe("CORE_RESIZE", handleWindowResize);
@@ -270,7 +270,7 @@ define(["lib-build/css!lib-app/bootstrap/css/bootstrap.min",
 				// use .portalUrl instead of just .url -- otherwise Portal federated services
 				// look in the wrong place for generateToken. Check esri.id.serverInfos if
 				// you run into this problem.
-				IdentityManager.checkSignInStatus(app.portal.portalUrl);
+				ik.IdentityManager.checkSignInStatus(app.portal.portalUrl);
 
 				// If app is configured to use OAuth
 				if ( app.indexCfg.oAuthAppId ) {
@@ -280,9 +280,9 @@ define(["lib-build/css!lib-app/bootstrap/css/bootstrap.min",
 						portalUrl: 'https:' + app.indexCfg.sharingurl.split('/sharing/')[0]
 					});
 
-					IdentityManager.registerOAuthInfos([info]);
+					ik.IdentityManager.registerOAuthInfos([info]);
 
-					IdentityManager.checkSignInStatus(info.portalUrl).then(
+					ik.IdentityManager.checkSignInStatus(info.portalUrl).then(
 						function() {
 							// User has signed-in using oAuth
 							if ( ! builder )
@@ -344,8 +344,8 @@ define(["lib-build/css!lib-app/bootstrap/css/bootstrap.min",
 							portalUrl: 'https:' + app.indexCfg.sharingurl.split('/sharing')[0],
 							popup: true
 						});
-						IdentityManager.registerOAuthInfos([oAuthInfo]);
-						IdentityManager.checkAppAccess('https:' + app.indexCfg.sharingurl, 'storymaps').then(function(identityResponse){
+						ik.IdentityManager.registerOAuthInfos([oAuthInfo]);
+						ik.IdentityManager.checkAppAccess('https:' + app.indexCfg.sharingurl, 'storymaps').then(function(identityResponse){
 							if (identityResponse && identityResponse.code && identityResponse.code === "IdentityManagerBase.1") {
 								initError("notAuthorizedBuilder");
 								return;
@@ -407,9 +407,9 @@ define(["lib-build/css!lib-app/bootstrap/css/bootstrap.min",
 						portalUrl: 'https:' + app.indexCfg.sharingurl.split('/sharing')[0],
 						popup: true
 					});
-					IdentityManager.registerOAuthInfos([oAuthInfo]);
+					ik.IdentityManager.registerOAuthInfos([oAuthInfo]);
 					if(response.item.access !== "public") {
-						IdentityManager.checkAppAccess('https:' + app.indexCfg.sharingurl, 'storymaps').then(function(identityResponse){
+						ik.IdentityManager.checkAppAccess('https:' + app.indexCfg.sharingurl, 'storymaps').then(function(identityResponse){
 							if (identityResponse && identityResponse.code && identityResponse.code === "IdentityManagerBase.1") {
 								initError("notAuthorizedLicense");
 								return;
@@ -538,7 +538,7 @@ define(["lib-build/css!lib-app/bootstrap/css/bootstrap.min",
 		{
 			var resultDeferred = new Deferred();
 
-			on(IdentityManager, "dialog-create", styleIdentityManagerForBuilder);
+			on(ik.IdentityManager, "dialog-create", styleIdentityManagerForBuilder);
 
 			app.portal.signIn().then(
 				function() {
@@ -983,17 +983,17 @@ define(["lib-build/css!lib-app/bootstrap/css/bootstrap.min",
 			$(".esriSignInDialog").find(".dijitDialogTitleBar").find(".dijitDialogTitle").first().html(i18n.viewer.signin.title);
 
 			// If safe hide default message and setup a more friendly text
-			if ( IdentityManager._arcgisUrl ) {
+			if ( ik.IdentityManager._arcgisUrl ) {
 				$(".esriSignInDialog").find(".dijitDialogPaneContentArea:first-child").find(":first-child").first().css("display", "none");
-				$(".esriSignInDialog").find(".dijitDialogPaneContentArea:first-child").find(":first-child").first().after("<div id='dijitDialogPaneContentAreaLoginText'>" + i18n.viewer.signin.explainViewer.replace("%PORTAL_LINK%", "<a href='http://" + IdentityManager._arcgisUrl + "' title='" + IdentityManager._arcgisUrl + "' target='_blank'>" + IdentityManager._arcgisUrl + "</a>") + "</div>");
+				$(".esriSignInDialog").find(".dijitDialogPaneContentArea:first-child").find(":first-child").first().after("<div id='dijitDialogPaneContentAreaLoginText'>" + i18n.viewer.signin.explainViewer.replace("%PORTAL_LINK%", "<a href='http://" + ik.IdentityManager._arcgisUrl + "' title='" + ik.IdentityManager._arcgisUrl + "' target='_blank'>" + ik.IdentityManager._arcgisUrl + "</a>") + "</div>");
 			}
 		}
 
 		function styleIdentityManagerForBuilder()
 		{
 			// Setup a more friendly text
-			if ( IdentityManager._arcgisUrl )
-				$(".esriSignInDialog").find("#dijitDialogPaneContentAreaLoginText").html(i18n.viewer.signin.explainBuilder.replace("%PORTAL_LINK%", "<a href='http://" + IdentityManager._arcgisUrl + "' title='" + IdentityManager._arcgisUrl + "' target='_blank'>" + IdentityManager._arcgisUrl + "</a>"));
+			if ( ik.IdentityManager._arcgisUrl )
+				$(".esriSignInDialog").find("#dijitDialogPaneContentAreaLoginText").html(i18n.viewer.signin.explainBuilder.replace("%PORTAL_LINK%", "<a href='http://" + ik.IdentityManager._arcgisUrl + "' title='" + ik.IdentityManager._arcgisUrl + "' target='_blank'>" + ik.IdentityManager._arcgisUrl + "</a>"));
 		}
 
 		function prepareAppForWebmapReload()
@@ -1050,12 +1050,12 @@ define(["lib-build/css!lib-app/bootstrap/css/bootstrap.min",
 		function appLoadingTimeout()
 		{
 			// Restart the timeout if the dialog is shown or has been shown and the timeout hasn't been fired after it has been closed
-			if( IdentityManager && IdentityManager.dialog && IdentityManager.dialog._alreadyInitialized && ! IdentityManager.loadingTimeoutAlreadyFired) {
+			if( ik.IdentityManager && ik.IdentityManager.dialog && ik.IdentityManager.dialog._alreadyInitialized && ! ik.IdentityManager.loadingTimeoutAlreadyFired) {
 				clearTimeout(app.loadingTimeout);
 				startLoadingTimeout();
 				// Set a flag only if the dialog isn't showned now
-				if( ! IdentityManager._busy )
-					IdentityManager.loadingTimeoutAlreadyFired = true;
+				if( ! ik.IdentityManager._busy )
+					ik.IdentityManager.loadingTimeoutAlreadyFired = true;
 				return;
 			}
 

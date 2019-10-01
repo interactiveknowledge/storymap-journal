@@ -107,7 +107,7 @@ define([
 			// Init with the Identity and App Item
 			// This is the only time this is passed to MyStories
 			app.mystories.init(
-				app.isInBuilder ? IdentityManager.toJson() : null,
+				app.isInBuilder ? ik.IdentityManager.toJson() : null,
 				app.isDirectCreationFirstSave || app.isGalleryCreation ? null : app.data.getWebAppItem(),
 				app.cfg.TPL_ID,
 				app.isPortal,

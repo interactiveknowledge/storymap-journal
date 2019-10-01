@@ -158,7 +158,7 @@ server.listen(3000, error => {
 
         mainWindow.removeMenu()
 
-        mainWindow.loadURL(`http://localhost:3000?version=${process.env.KIOSK_VERSION}`)
+        mainWindow.loadURL(`http://localhost:3000?version=${process.env.KIOSK_VERSION}&username=${process.env.USERNAME}&password=${process.env.PASSWORD}`)
 
         return mainWindow
       }
@@ -180,7 +180,7 @@ server.listen(3000, error => {
 
             let mainWindow = createMainWindow()
 
-            mainWindow.on('ready-to-show', () => {
+            mainWindow.once('ready-to-show', () => {
               loading.hide()
               loading.close()
               mainWindow.show()

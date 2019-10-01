@@ -7,7 +7,8 @@ define([
   'lib-build/tpl!../../tpl/components/NavigationButton',
   'lib-build/tpl!../../tpl/tags/img',
   'lib-build/tpl!../../tpl/svg/leaf',
-  'esri/arcgis/utils'
+  'esri/arcgis/utils',
+  "dojo/on"
 ], function (
   interactionActiveTpl,
   interactionAttractTpl,
@@ -17,7 +18,8 @@ define([
   NavigationButton,
   imgTag,
   leafLogo,
-  esriUtils
+  esriUtils,
+  on
 ) {
   return function Interaction () {
     var render = function () {
@@ -298,6 +300,17 @@ define([
 
       container.html('');
 
+    // Get Credentials.
+			if ( app.indexCfg.username && app.indexCfg.password) {
+				on(ik.IdentityManager, 'dialog-create', function(){
+					on(ik.IdentityManager.dialog, 'show', function(){
+						ik.IdentityManager.dialog.txtUser_.set('value', app.indexCfg.username);
+						ik.IdentityManager.dialog.txtPwd_.set('value', app.indexCfg.password);
+						ik.IdentityManager.dialog.btnSubmit_.onClick();
+					});
+				});
+			}
+
       var map = esriUtils.createMap(mapid, container[0], {
         mapOptions: {
           slider: true,
@@ -306,7 +319,6 @@ define([
           center: [-40.0, 18.3]
         }
       }).then(function (response) {
-        console.log('Map Data Received');
         ik.map = response.map;
       });
     }

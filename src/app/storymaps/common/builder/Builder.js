@@ -559,7 +559,7 @@ define(["lib-build/css!./Builder",
 				return;
 			}
 
-			var uid = IdentityManager.findCredential(getPortalURL()).userId;
+			var uid = ik.IdentityManager.findCredential(getPortalURL()).userId;
 
 			// Create the app item
 			app.data.setWebAppItem(
@@ -671,7 +671,7 @@ define(["lib-build/css!./Builder",
 				return;
 			}
 
-			var uid = IdentityManager.findCredential(getPortalURL()).userId;
+			var uid = ik.IdentityManager.findCredential(getPortalURL()).userId;
 
 			// Update the webmap item
 			var webMapItem = app.data.getWebMap();
@@ -771,8 +771,8 @@ define(["lib-build/css!./Builder",
 		{
 			var portalUrl = getPortalURL(),
 				appItem = lang.clone(app.data.getWebAppItem()),
-				uid = appItem.owner || IdentityManager.findCredential(portalUrl).userId,
-				token  = IdentityManager.findCredential(portalUrl).token;
+				uid = appItem.owner || ik.IdentityManager.findCredential(portalUrl).userId,
+				token  = ik.IdentityManager.findCredential(portalUrl).token;
 
 			// Remove properties that don't have to be committed
 			delete appItem.avgRating;
@@ -975,8 +975,8 @@ define(["lib-build/css!./Builder",
 		function shareItems(items, sharing)
 		{
 			var portalUrl = getPortalURL(),
-				uid = IdentityManager.findCredential(portalUrl).userId,
-				token  = IdentityManager.findCredential(portalUrl).token;
+				uid = ik.IdentityManager.findCredential(portalUrl).userId,
+				token  = ik.IdentityManager.findCredential(portalUrl).token;
 
 			var params = {
 				f: "json",
@@ -1060,8 +1060,8 @@ define(["lib-build/css!./Builder",
 			app.portal.signIn().then(
 				function(){
 					var portalUrl = getPortalURL(),
-						uid = IdentityManager.findCredential(portalUrl).userId,
-						token  = IdentityManager.findCredential(portalUrl).token,
+						uid = ik.IdentityManager.findCredential(portalUrl).userId,
+						token  = ik.IdentityManager.findCredential(portalUrl).token,
 						appItem = lang.clone(app.data.getWebAppItem());
 
 					// Remove properties that don't have to be committed

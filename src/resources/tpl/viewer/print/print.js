@@ -583,13 +583,13 @@ require([
     if (app.portal && app.portal.getPortalUser()) {
       return app.portal.getPortalUser().credential.token;
     }
-    var originCredential = IdentityManager.findCredential(document.location.origin);
+    var originCredential = ik.IdentityManager.findCredential(document.location.origin);
     if (originCredential) {
       return originCredential.token;
     }
-    var urlCredential = IdentityManager.findCredential(app.portal.url);
+    var urlCredential = ik.IdentityManager.findCredential(app.portal.url);
     if (urlCredential) {
-      return IdentityManager.findCredential(app.portal.url).token;
+      return ik.IdentityManager.findCredential(app.portal.url).token;
     }
     return this.getCookieToken();
   }

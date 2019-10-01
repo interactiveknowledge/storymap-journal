@@ -17,7 +17,8 @@ define([
   './sections/Interaction',
   './sections/Menu',
   './sections/Bottom',
-  'lib-build/tpl!../tpl/components/IdleModal'
+  'lib-build/tpl!../tpl/components/IdleModal',
+  'esri/IdentityManager'
 ], function(
   fontAwesomeCss,
   wrapperTpl,
@@ -37,11 +38,14 @@ define([
   Info,
   Menu,
   Bottom,
-  tplIdleModal
+  tplIdleModal,
+  IdentityManager
 ) {
   return function Wrapper() {
 
     var version = app.indexCfg.ik.version
+
+    ik.IdentityManager = IdentityManager;
 
     // Have a wrapper state
     var state = new Stateful();
