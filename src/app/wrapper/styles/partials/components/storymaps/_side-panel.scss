@@ -1,4 +1,4 @@
-@mixin sidePanelTheme ($primary, $secondary, $background, $font-color: $white) {
+@mixin sidePanelTheme ($type, $primary, $secondary, $background, $font-color: $white) {
   .interaction__storymap {
     #sidePanel {
       background-color: $background;
@@ -29,11 +29,13 @@
           }
         }
 
-        &:last-of-type {
-          .content {
-            &.overflow {
-              &::after {
-                bottom: 175px;
+        @if ($type == 'cdi') {
+          &:last-of-type {
+            .content {
+              &.overflow {
+                &::after {
+                  bottom: 175px;
+                }
               }
             }
           }
@@ -123,61 +125,61 @@
 }
 
 .cdi-africa {
-  @include sidePanelTheme($region-1-primary, $region-1-secondary, $region-1-background);
+  @include sidePanelTheme('cdi', $region-1-primary, $region-1-secondary, $region-1-background);
 }
 
 .cdi-americas {
-  @include sidePanelTheme($region-2-primary, $region-2-secondary, $region-2-background);
+  @include sidePanelTheme('cdi', $region-2-primary, $region-2-secondary, $region-2-background);
 }
 
 .cdi-caribbean {
-  @include sidePanelTheme($region-3-primary, $region-3-secondary, $region-3-background, $region-3-secondary);
+  @include sidePanelTheme('cdi', $region-3-primary, $region-3-secondary, $region-3-background, $region-3-secondary);
 }
 
 .cdi-europe {
-  @include sidePanelTheme($region-4-primary, $region-4-secondary, $region-4-background);
+  @include sidePanelTheme('cdi', $region-4-primary, $region-4-secondary, $region-4-background);
 }
 
 .cdi-asia {
-  @include sidePanelTheme($region-5-primary, $region-5-secondary, $region-5-background);
+  @include sidePanelTheme('cdi', $region-5-primary, $region-5-secondary, $region-5-background);
 }
 
 .cdi-region-6 {
-  @include sidePanelTheme($region-6-primary, $region-6-secondary, $region-6-background);
+  @include sidePanelTheme('cdi', $region-6-primary, $region-6-secondary, $region-6-background);
 }
 
 .cdi-region-7 {
-  @include sidePanelTheme($region-7-primary, $region-7-secondary, $region-7-background);
+  @include sidePanelTheme('cdi', $region-7-primary, $region-7-secondary, $region-7-background);
 }
 
 .cdi-region-8 {
-  @include sidePanelTheme($region-8-primary, $region-8-secondary, $region-8-background);
+  @include sidePanelTheme('cdi', $region-8-primary, $region-8-secondary, $region-8-background);
 }
 
 .what-is-leaf {
-  @include sidePanelTheme($what-is-leaf-primary, $what-is-leaf-secondary, $what-is-leaf-background);
+  @include sidePanelTheme('llc', $what-is-leaf-primary, $what-is-leaf-secondary, $what-is-leaf-background);
 }
 
 .schools-streets {
-  @include sidePanelTheme($schools-streets-primary, $schools-streets-secondary, $schools-streets-background);
+  @include sidePanelTheme('llc', $schools-streets-primary, $schools-streets-secondary, $schools-streets-background);
 }
 
 .leaf-international {
-  @include sidePanelTheme($leaf-international-primary, $leaf-international-secondary, $leaf-international-background);
+  @include sidePanelTheme('llc', $leaf-international-primary, $leaf-international-secondary, $leaf-international-background);
 }
 
 .leaf-festival {
-  @include sidePanelTheme($leaf-festival-primary, $leaf-festival-secondary, $leaf-festival-background);
+  @include sidePanelTheme('llc', $leaf-festival-primary, $leaf-festival-secondary, $leaf-festival-background);
 }
 
 .leaf-downtown {
-  @include sidePanelTheme($leaf-downtown-primary, $leaf-downtown-secondary, $leaf-downtown-background);
+  @include sidePanelTheme('llc', $leaf-downtown-primary, $leaf-downtown-secondary, $leaf-downtown-background);
 }
 
 .leaf-global {
-  @include sidePanelTheme($leaf-global-primary, $leaf-global-secondary, $leaf-global-background);
+  @include sidePanelTheme('llc', $leaf-global-primary, $leaf-global-secondary, $leaf-global-background);
 }
 
 .more-about-leaf {
-  @include sidePanelTheme($more-about-leaf-primary, $more-about-leaf-secondary, $more-about-leaf-background);
+  @include sidePanelTheme('llc', $more-about-leaf-primary, $more-about-leaf-secondary, $more-about-leaf-background);
 }
