@@ -378,26 +378,31 @@ define(["lib-build/tpl!./SidePanelSection",
         }
 
         var regionTitle = '';
-        var regionId = '';
+        var targetId = '';
         var navTitle = '';
         if (nextTitle.length === 0) {
           navTitle = 'Explore another region';
+          actionName = 'region';
           buttonTitle = '';
 
           if (app.isInBuilder === true) {
             if (configOptions.ik.version === 'cdi') {
               regionTitle = 'Region Name';
-              regionId = 0;
+              targetId = 0;
             } else {
+              actionName = 'explore';
               navTitle = 'Explore our Global Community';
+              targetId = 0;
             }
           } else {
             if (ik.wrapper.state.get('version') === 'cdi') {
-              regionId = ik.wrapper.state.get('regionid');
-              var region = ik.wrapper.api.region.get(regionId);
+              targetId = ik.wrapper.state.get('regionid');
+              var region = ik.wrapper.api.region.get(targetId);
               regionTitle = region[0].name;
             } else {
+              actionName = 'explore';
               navTitle = 'Explore our Global Community';
+              targetId = ik.wrapper.layout.state.explore.section.interaction.map;
             }
           }
         }
@@ -415,7 +420,7 @@ define(["lib-build/tpl!./SidePanelSection",
           buttonTitle: buttonTitle,
           buttonSubtitle: buttonSubtitle,
           regionTitle:regionTitle,
-          regionId: regionId,
+          targetId: targetId,
           navTitle: navTitle
 				});
 			}

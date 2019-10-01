@@ -22,22 +22,22 @@
     <% } %>
     <% if (regionTitle.length > 0) { %>
     <li>
-      <button data-nav="region" data-region="<%= regionId %>" href="#">
+      <button data-nav="<%= actionName %>" data-region="<%= targetId %>" href="#">
         <div>
           Explore more of <%= regionTitle %>
         </div>
       </button>
-      <div class="arrow" data-nav="region" data-region="<%= regionId %>"></div>
+      <div class="arrow" data-nav="<%= actionName %>" data-region="<%= targetId %>"></div>
     </li>
     <% } %>
     <% if (navTitle.length > 0) { %>
     <li>
-      <button data-nav="nav" href="#">
+      <button data-nav="<%= actionName %>" data-<%= actionName %>="<%= targetId %>" href="#">
         <div>
           <%= navTitle %>
         </div>
       </button>
-      <div class="arrow" data-nav="nav"></div>
+      <div class="arrow" data-nav="<%= actionName %>" data-<%= actionName %>="<%= targetId %>"></div>
     </li>
     <% } %>
   </div>
