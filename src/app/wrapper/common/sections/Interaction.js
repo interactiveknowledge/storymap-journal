@@ -314,9 +314,7 @@ define([
       var map = esriUtils.createMap(mapid, container[0], {
         mapOptions: {
           slider: true,
-          nav:false,
-          minZoom: 3,
-          center: [-40.0, 18.3]
+          nav:false
         }
       }).then(function (response) {
         ik.map = response.map;
