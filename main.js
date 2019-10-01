@@ -158,7 +158,7 @@ server.listen(3000, error => {
 
         mainWindow.removeMenu()
 
-        mainWindow.loadURL(`http://localhost:3000?version=${process.env.KIOSK_VERSION}&username=${process.env.USERNAME}&password=${process.env.PASSWORD}`)
+        mainWindow.loadURL(`http://localhost:3000?version=${process.env.KIOSK_VERSION}&username=${process.env.ESRI_USER}&password=${process.env.ESRI_PASSWORD}`)
 
         return mainWindow
       }
