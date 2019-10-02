@@ -45,7 +45,8 @@ else {
 								"dojo/i18n!./resources/tpl/builder/nls/template.js?v=" + app.version,
 								"dojo/i18n!commonResources/nls/media.js?v=" + app.version,
 								"dojo/i18n!commonResources/nls/webmap.js?v=" + app.version,
-								"dojo/i18n!commonResources/nls/mapcontrols.js?v=" + app.version
+								"dojo/i18n!commonResources/nls/mapcontrols.js?v=" + app.version,
+                "esri/IdentityManager"
 							], function(
                 Edit,
 								Builder,
@@ -53,12 +54,16 @@ else {
 								i18nBuilder,
 								i18nCommonMedia,
 								i18nCommonWebmap,
-								i18nCommonMapControls
+								i18nCommonMapControls,
+                IdentityManager
 							){
 								lang.mixin(i18n, i18nBuilder);
 								lang.mixin(i18n, i18nCommonMedia);
 								lang.mixin(i18n, i18nCommonWebmap);
 								lang.mixin(i18n, i18nCommonMapControls);
+
+                console.log('set id manageer');
+                ik.IdentityManager = IdentityManager;
 
 								var builderView = new BuilderView(Core),
 								mainView = new MainView(builderView);

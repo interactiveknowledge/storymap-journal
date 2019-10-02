@@ -377,32 +377,44 @@ define(["lib-build/tpl!./SidePanelSection",
           buttonSubtitle = nextSubtitle.match(/(?<=(?!h1|h2|h3|h4|h5|h6|span)\>)(.+?)(?=<\/(h1|h2|h3|h4|h5|h6|span))/g);
         }
 
-        var regionTitle = '';
-        var targetId = '';
-        var navTitle = '';
+        var region = {
+          title: '',
+          targetId: '',
+          actionName: '',
+        };
+
+        var nav = {
+          title: '',
+          targetId: '',
+          actionName: '',
+        };
+
         if (nextTitle.length === 0) {
-          navTitle = 'Explore another region';
-          actionName = 'region';
+          nav.title = 'Explore another region';
+          nav.actionName = 'nav';
           buttonTitle = '';
 
           if (app.isInBuilder === true) {
             if (configOptions.ik.version === 'cdi') {
-              regionTitle = 'Region Name';
-              targetId = 0;
+              region.title = 'Region Name';
+              region.targetId = 0;
             } else {
-              actionName = 'explore';
-              navTitle = 'Explore our Global Community';
-              targetId = 0;
+              region.title = '';
+              nav.actionName = 'explore';
+              nav.title = 'Explore our Global Community';
+              nav.targetId = 0;
             }
           } else {
             if (ik.wrapper.state.get('version') === 'cdi') {
-              targetId = ik.wrapper.state.get('regionid');
-              var region = ik.wrapper.api.region.get(targetId);
-              regionTitle = region[0].name;
+              region.targetId = ik.wrapper.state.get('regionid');
+              regionInfo = ik.wrapper.api.region.get(region.targetId);
+              region.title = regionInfo[0].name;
+              region.actionName = 'region';
             } else {
-              actionName = 'explore';
-              navTitle = 'Explore our Global Community';
-              targetId = ik.wrapper.layout.state.explore.section.interaction.map;
+              region.title = '';
+              nav.actionName = 'explore';
+              nav.title = 'Explore our Global Community';
+              nav.targetId = ik.wrapper.layout.state.explore.section.interaction.map;
             }
           }
         }
@@ -419,9 +431,8 @@ define(["lib-build/tpl!./SidePanelSection",
           actionName: actionName,
           buttonTitle: buttonTitle,
           buttonSubtitle: buttonSubtitle,
-          regionTitle:regionTitle,
-          targetId: targetId,
-          navTitle: navTitle
+          nav: nav,
+          region: region
 				});
 			}
 

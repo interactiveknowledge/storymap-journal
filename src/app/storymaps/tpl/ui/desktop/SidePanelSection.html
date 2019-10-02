@@ -20,24 +20,24 @@
       <div class="arrow" data-storymaps="<%= actionName %>" data-storymaps-type="navigate"></div>
     </li>
     <% } %>
-    <% if (regionTitle.length > 0) { %>
+    <% if (region.title.length > 0) { %>
     <li>
-      <button data-nav="<%= actionName %>" data-region="<%= targetId %>" href="#">
+      <button data-nav="<%= region.actionName %>" data-region="<%= region.targetId %>" href="#">
         <div>
-          Explore more of <%= regionTitle %>
+          Explore more of <%= region.title %>
         </div>
       </button>
-      <div class="arrow" data-nav="<%= actionName %>" data-region="<%= targetId %>"></div>
+      <div class="arrow" data-nav="<%= region.actionName %>" data-region="<%= region.targetId %>"></div>
     </li>
     <% } %>
-    <% if (navTitle.length > 0) { %>
+    <% if (nav.title.length > 0) { %>
     <li>
-      <button data-nav="<%= actionName %>" data-<%= actionName %>="<%= targetId %>" href="#">
+      <button data-nav="<%= nav.actionName %>" data-<%= nav.actionName %>="<%= nav.targetId %>" href="#">
         <div>
-          <%= navTitle %>
+          <%= nav.title %>
         </div>
       </button>
-      <div class="arrow" data-nav="<%= actionName %>" data-<%= actionName %>="<%= targetId %>"></div>
+      <div class="arrow" data-nav="<%= nav.actionName %>" data-<%= nav.actionName %>="<%= nav.targetId %>"></div>
     </li>
     <% } %>
   </div>
