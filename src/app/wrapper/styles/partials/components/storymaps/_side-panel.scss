@@ -63,6 +63,10 @@
     width: 540px;
   }
 
+  .sectionPanel .error-status.enabled {
+    display: none !important;
+  }
+
   .section {
     @include flex(column, normal);
     touch-action: none;

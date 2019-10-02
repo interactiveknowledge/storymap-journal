@@ -18,7 +18,9 @@ define([
   './sections/Menu',
   './sections/Bottom',
   'lib-build/tpl!../tpl/components/IdleModal',
-  'esri/IdentityManager'
+  'esri/IdentityManager',
+  "dojo/on",
+  "esri/arcgis/utils"
 ], function(
   fontAwesomeCss,
   wrapperTpl,
@@ -39,7 +41,9 @@ define([
   Menu,
   Bottom,
   tplIdleModal,
-  IdentityManager
+  IdentityManager,
+  on,
+  esriUtils
 ) {
   return function Wrapper() {
 
@@ -376,6 +380,33 @@ define([
         $('#button-next').attr('class', '');
       }
     });
+
+    /** Initialize the map listening events for LLC since it requires login */
+    if (this.version === 'llc') {
+      // Get Credentials.
+      if ( app.indexCfg.username && app.indexCfg.password) {
+        on(ik.IdentityManager, 'dialog-create', function(){
+          on(ik.IdentityManager.dialog, 'show', function(){
+            ik.IdentityManager.dialog.txtUser_.set('value', app.indexCfg.username);
+            ik.IdentityManager.dialog.txtPwd_.set('value', app.indexCfg.password);
+            ik.IdentityManager.dialog.btnSubmit_.onClick();
+          });
+        });
+      }
+
+      var container = $('#explore-map');
+
+      container.html('');
+
+      var map = esriUtils.createMap(ik.wrapper.layout.state.explore.section.interaction.map, container[0], {
+        mapOptions: {
+          slider: true,
+          nav:false
+        }
+      }).then(function (response) {
+        ik.map = response.map;
+      });
+    }
   } // End init()
 
     /**
@@ -393,7 +424,7 @@ define([
 
     this.showExplore = function (mapid) {
       ik.wrapper.state.set('prev-wrapper-state', ik.wrapper.state.get('wrapper-state'));
-      console.log('mapid', mapid);
+
       if (ik.wrapper.state.get('mapid') !== mapid) {
         ik.wrapper.state.set('mapid', mapid);
       }

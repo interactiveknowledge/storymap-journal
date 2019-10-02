@@ -300,17 +300,6 @@ define([
 
       container.html('');
 
-    // Get Credentials.
-			if ( app.indexCfg.username && app.indexCfg.password) {
-				on(ik.IdentityManager, 'dialog-create', function(){
-					on(ik.IdentityManager.dialog, 'show', function(){
-						ik.IdentityManager.dialog.txtUser_.set('value', app.indexCfg.username);
-						ik.IdentityManager.dialog.txtPwd_.set('value', app.indexCfg.password);
-						ik.IdentityManager.dialog.btnSubmit_.onClick();
-					});
-				});
-			}
-
       var map = esriUtils.createMap(mapid, container[0], {
         mapOptions: {
           slider: true,
