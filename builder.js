@@ -1,6 +1,33 @@
 const buildOptions = require('./static/templates/electron/build.js')
 const fs = require('fs')
-const { KIOSK_REGION, KIOSK_VERSION } = process.env
+
+let { KIOSK_REGION, KIOSK_VERSION } = process.env
+
+if (process.argv[2]) {
+  switch (process.argv[2]) {
+    case 'LLC':
+      KIOSK_VERSION = 'llc'
+      process.env['KIOSK_UUID'] = process.env[process.argv[2] + '_UUID']
+      break
+    case 'CARIB':
+      KIOSK_REGION = 'Caribbean'
+      KIOSK_VERION = 'cdi'
+      process.env['KIOSK_UUID'] = process.env[process.argv[2] + '_UUID']
+      break
+    case 'AFRI':
+      KIOSK_REGION = 'Africa'
+      KIOSK_VERION = 'cdi'
+      process.env['KIOSK_UUID'] = process.env[process.argv[2] + '_UUID']
+      break
+    case 'AMER':
+      KIOSK_REGION = 'Americas'
+      KIOSK_VERION = 'cdi'
+      process.env['KIOSK_UUID'] = process.env[process.argv[2] + '_UUID']
+      break
+    default:
+      console.error('Not a valid argument')
+  }
+}
 
 const humanName = (KIOSK_VERSION.toLowerCase() === 'cdi')
   ? 'Cultural Dive In' + ' ' + KIOSK_REGION
