@@ -426,25 +426,7 @@ const createRegions = (body, featuredRegion) => {
  * Export the logic so that the 
  */
 module.exports = async (event) => {
-  let { BACKEND_URL, KIOSK_VERSION, KIOSK_UUID } = process.env
-
-  if (KIOSK_VERSION === 'llc') {
-    KIOSK_UUID = process.env.LLC_UUID
-  } else if (KIOSK_VERSION === 'cdi') {
-    switch (process.env.KIOSK_REGION) {
-      case 'Caribbean':
-        KIOSK_UUID = process.env.CARIB_UUID
-        break
-      case 'Africa':
-        KIOSK_UUID = process.env.AFRI_UUID
-        break
-      case 'Americas':
-        KIOSK_UUID = process.env.AMER_UUID
-        break
-      default:
-        // Do nothing
-    }
-  }
+  const { BACKEND_URL, KIOSK_VERSION, KIOSK_UUID } = process.env
 
   /**
    * Set up events that track files which are downloading.

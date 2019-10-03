@@ -73,25 +73,6 @@ server.listen(3000, error => {
       const logger = require('electron-log')
       let loadingWindow
       let mainWindow
-      let KIOSK_UUID = process.env.KIOSK_UUID
-
-      if (process.env.KIOSK_VERSION === 'llc') {
-        KIOSK_UUID = process.env.LLC_UUID
-      } else if (process.env.KIOSK_VERSION === 'cdi') {
-        switch (process.env.KIOSK_REGION) {
-          case 'Caribbean':
-            KIOSK_UUID = process.env.CARIB_UUID
-            break
-          case 'Africa':
-            KIOSK_UUID = process.env.AFRI_UUID
-            break
-          case 'Americas':
-            KIOSK_UUID = process.env.AMER_UUID
-            break
-          default:
-            // Do nothing
-        }
-      }
 
       const notifySentry = (message, level, exception = true) => {
         if (process.env.ENV === 'production') {

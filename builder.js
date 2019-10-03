@@ -3,28 +3,6 @@ const fs = require('fs')
 
 let { KIOSK_REGION, KIOSK_VERSION } = process.env
 
-if (process.argv[2]) {
-  switch (process.argv[2]) {
-    case 'LLC':
-      KIOSK_VERSION = 'llc'
-      break
-    case 'CARIB':
-      KIOSK_REGION = 'Caribbean'
-      KIOSK_VERSION = 'cdi'
-      break
-    case 'AFRI':
-      KIOSK_REGION = 'Africa'
-      KIOSK_VERSION = 'cdi'
-      break
-    case 'AMER':
-      KIOSK_REGION = 'Americas'
-      KIOSK_VERSION = 'cdi'
-      break
-    default:
-      console.error('Not a valid argument')
-  }
-}
-
 const humanName = (KIOSK_VERSION.toLowerCase() === 'cdi')
   ? 'Cultural Dive In' + ' ' + KIOSK_REGION
   : 'Love and Connections'
