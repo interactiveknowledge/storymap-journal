@@ -72,6 +72,42 @@ const regionTemplate = {
   }
 }
 
+const notifySentry = (message, level) => {
+  if (process.env.ENV === 'production') {
+    if (process.env.SENTRY_DSN) {
+      let Sentry
+
+      if (process.env.BUILD_TARGET === 'electron') {
+        Sentry = require('@sentry/electron')
+      } else {
+        Sentry = require('@sentry/node')
+      }
+
+      const os = require('os')
+      const user = os.userInfo().username
+      const pkg = require('../package.json')
+
+      Sentry.init({ dsn: process.env.SENTRY_DSN })
+
+      Sentry.configureScope((scope) => {
+        scope.setUser({ 'username': user })
+        scope.setTag('platform', os.platform())
+        scope.setTag('version', pkg.version)
+        scope.setTag('kiosk_version', process.env.KIOSK_VERSION)
+        if (process.env.KIOSK_VERSION === 'cdi') {
+          scope.setTag('cdi_region', process.env.KIOSK_REGION)
+        }
+        scope.setTag('drupal_kiosk_uuid', process.env.KIOSK_UUID)
+        scope.setLevel(level)
+      })
+
+      Sentry.captureException(message)
+    }
+  } else {
+    console.error(message)
+  }
+}
+
 /**
  * capture the image derivatives from the response data and append it 
  * to the JSONa object which does not process meta objects
@@ -168,7 +204,7 @@ const setFile = (fileuri) => {
 
       res.data.pipe(writeStream)
     }).catch(error => {
-      console.error(error)
+      notifySentry(error, 'error')
     })
 
   return relFilepath
@@ -476,7 +512,7 @@ module.exports = async (event) => {
     // Pass the kiosk data outside this scope
     kioskResponse = formatter.deserialize(response.data)
   } catch (error) {
-    console.error(error)
+    notifySentry(error, 'error')
   }
 
   if (KIOSK_VERSION === 'cdi') {
@@ -547,7 +583,7 @@ module.exports = async (event) => {
       writeJsonToFile(apiPath + '/storymaps.json', storymapApi)
       writeJsonToFile(apiPath + '/regions.json', newRegions)
     } catch (error) {
-      console.error(error)
+      notifySentry(error, 'error')
     }
   }
 }

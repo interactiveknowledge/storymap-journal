@@ -71,30 +71,36 @@ server.listen(3000, error => {
       const { app, BrowserWindow, ipcMain } = require('electron')
 
       const logger = require('electron-log')
-      const os = require('os')
-      const Sentry = require('@sentry/electron')
-      const user = os.userInfo().username
-
       let loadingWindow
       let mainWindow
 
-      // Sentry.
-      if (process.env.SENTRY_DSN) {
-        Sentry.init({ dsn: process.env.SENTRY_DSN })
-      }
+      const notifySentry = (message, level) => {
+        if (process.env.ENV === 'production') {
+          if (process.env.SENTRY_DSN) {
 
-      function notifySentry (message, level, exception = false) {
-        if (dev !== true && process.env.SENTRY_DSN) {
-          Sentry.configureScope((scope) => {
-            scope.setUser({ 'username': user })
-            scope.setLevel(level)
-          })
-      
-          if (exception === true) {
-            Sentry.captureMessage(message)
-          } else {
+            const Sentry = require('@sentry/electron')
+            const os = require('os')
+            const user = os.userInfo().username
+            const pkg = require('../package.json')
+
+            Sentry.init({ dsn: process.env.SENTRY_DSN })
+
+            Sentry.configureScope((scope) => {
+              scope.setUser({ 'username': user })
+              scope.setTag('platform', os.platform())
+              scope.setTag('version', pkg.version)
+              scope.setTag('kiosk_version', process.env.KIOSK_VERSION)
+              if (process.env.KIOSK_VERSION === 'cdi') {
+                scope.setTag('cdi_region', process.env.KIOSK_REGION)
+              }
+              scope.setTag('drupal_kiosk_uuid', process.env.KIOSK_UUID)
+              scope.setLevel(level)
+            })
+
             Sentry.captureException(message)
           }
+        } else {
+          logger.error(message)
         }
       }
 
@@ -245,7 +251,7 @@ server.listen(3000, error => {
       ipcMain.on('log-message-to-file', (event, arg) => {
         // Only log warnings, errors and fatals to sentry.
         const sentry = ['warning', 'error', 'fatal']
-        if (process.env.REACT_APP_ENVIRONMENT === 'production' && sentry.indexOf(arg.type) !== -1) {
+        if (process.env.ENV === 'production' && sentry.indexOf(arg.type) !== -1) {
           if (arg.type === 'warn') {
             arg.type = 'warning'
           }
