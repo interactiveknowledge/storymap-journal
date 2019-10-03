@@ -73,8 +73,27 @@ server.listen(3000, error => {
       const logger = require('electron-log')
       let loadingWindow
       let mainWindow
+      let KIOSK_UUID = process.env.KIOSK_UUID
 
-      const notifySentry = (message, level) => {
+      if (process.env.KIOSK_VERSION === 'llc') {
+        KIOSK_UUID = process.env.LLC_UUID
+      } else if (process.env.KIOSK_VERSION === 'cdi') {
+        switch (process.env.KIOSK_REGION) {
+          case 'Caribbean':
+            KIOSK_UUID = process.env.CARIB_UUID
+            break
+          case 'Africa':
+            KIOSK_UUID = process.env.AFRI_UUID
+            break
+          case 'Americas':
+            KIOSK_UUID = process.env.AMER_UUID
+            break
+          default:
+            // Do nothing
+        }
+      }
+
+      const notifySentry = (message, level, exception = true) => {
         if (process.env.ENV === 'production') {
           if (process.env.SENTRY_DSN) {
 
@@ -97,7 +116,11 @@ server.listen(3000, error => {
               scope.setLevel(level)
             })
 
-            Sentry.captureException(message)
+            if (exception === true) {
+              Sentry.captureException(message)
+            } else {
+              Sentry.captureMessage(message)
+            }
           }
         } else {
           logger.error(message)
@@ -143,7 +166,7 @@ server.listen(3000, error => {
         webContents.on('crashed', () => {
           // Log error
           const message = 'App crashed! Creating new window.'
-          notifySentry(message, 'error')
+          notifySentry(message, 'error', false)
           logger.error(message)
 
           // Destroy window and start over
@@ -233,17 +256,17 @@ server.listen(3000, error => {
       })
 
       app.on('quit', () => {
-        notifySentry('App closed.', 'info')
+        notifySentry('App closed.', 'info', false)
         logger.info('App closed.')
       })
       
       app.on('uncaughException', error => {
-        notifySentry(error, 'error', true)
+        notifySentry(error, 'error')
         logger.error(error)
       })
       
       app.on('unhandledRejection', error => {
-        notifySentry(error, 'error', true)
+        notifySentry(error, 'error')
         logger.error(error)
       })
 
@@ -255,7 +278,7 @@ server.listen(3000, error => {
           if (arg.type === 'warn') {
             arg.type = 'warning'
           }
-          notifySentry(arg.message, arg.type)
+          notifySentry(arg.message, arg.type, false)
         }
       
         if (arg.type === 'warning') {

@@ -7,22 +7,18 @@ if (process.argv[2]) {
   switch (process.argv[2]) {
     case 'LLC':
       KIOSK_VERSION = 'llc'
-      process.env['KIOSK_UUID'] = process.env[process.argv[2] + '_UUID']
       break
     case 'CARIB':
       KIOSK_REGION = 'Caribbean'
-      KIOSK_VERION = 'cdi'
-      process.env['KIOSK_UUID'] = process.env[process.argv[2] + '_UUID']
+      KIOSK_VERSION = 'cdi'
       break
     case 'AFRI':
       KIOSK_REGION = 'Africa'
-      KIOSK_VERION = 'cdi'
-      process.env['KIOSK_UUID'] = process.env[process.argv[2] + '_UUID']
+      KIOSK_VERSION = 'cdi'
       break
     case 'AMER':
       KIOSK_REGION = 'Americas'
-      KIOSK_VERION = 'cdi'
-      process.env['KIOSK_UUID'] = process.env[process.argv[2] + '_UUID']
+      KIOSK_VERSION = 'cdi'
       break
     default:
       console.error('Not a valid argument')
