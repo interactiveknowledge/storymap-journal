@@ -176,6 +176,12 @@ const writeJsonToFile = (path = '', json = {}) => {fs.writeFileSync(path, JSON.s
  * @return {[String]}
  */
 const setFile = (fileuri) => {
+  if (fileuri.indexOf(staticPath) === 0) {
+    return fileuri.replace(staticPath, '/static')
+  }
+
+  fileuri = process.env.BACKEND_URL + fileuri
+
   const absFilepath = staticPath + '/download' + decodeURIComponent(url.parse(fileuri).pathname)
   const relFilepath = '/static/download' + decodeURIComponent(url.parse(fileuri).pathname)
 
@@ -224,7 +230,7 @@ const createLayout = (body) => {
   // Get the default layout file
   const layoutDefault = JSON.parse(fs.readFileSync(staticPath + '/templates/layout.json', 'utf8'))
 
-  let defaultAttractBgImg = staticPath + '/image/attract-background.json'
+  let defaultAttractBgImg = staticPath + '/image/attract-background.png'
 
   // Write layout information
   const { attract, explore, nav, region, storymap } = layoutDefault.state
@@ -234,16 +240,16 @@ const createLayout = (body) => {
 
   attract.section.info.h2 = getHeader(cmsContent, 'field_translated_title')
 
-  attract.section.info.logo = setFile(process.env.BACKEND_URL + cmsContent.field_logo.image.uri.url)
+  attract.section.info.logo = setFile(cmsContent.field_logo.image.uri.url)
 
   if (filepath = _.get(cmsContent, 'field_state_attract_bg_img.image.uri.url', defaultAttractBgImg)) {
-    attract.background.img = setFile(process.env.BACKEND_URL + filepath)
+    attract.background.img = setFile(filepath)
     defaultAttractBgImg = filepath
   }
 
   if (filepath = _.get(cmsContent, 'field_state_attract_bg_video.field_media_video_file.uri.url', false)) {
     attract.background.video = {
-      src: setFile(process.env.BACKEND_URL + cmsContent.field_state_attract_bg_video.field_media_video_file.uri.url),
+      src: setFile(cmsContent.field_state_attract_bg_video.field_media_video_file.uri.url),
       type: _.get(cmsContent, 'field_state_attract_bg_video.field_media_video_file.filemime', '')
     }
 
@@ -257,15 +263,15 @@ const createLayout = (body) => {
 
   nav.section.info.h2 = getHeader(cmsContent, 'field_state_nav_translated_title')
 
-  nav.section.info.logo = setFile(process.env.BACKEND_URL + cmsContent.field_logo.image.uri.url)
+  nav.section.info.logo = setFile(cmsContent.field_logo.image.uri.url)
 
   // Use attract screen background as template for others
   if (filepath = _.get(cmsContent, 'field_state_nav_bg_img.image.uri.url', defaultAttractBgImg))
-    nav.background.img = setFile(process.env.BACKEND_URL + filepath)
+    nav.background.img = setFile(filepath)
 
   if (filepath = _.get(cmsContent, 'field_state_nav_bg_video.field_media_video_file.uri.url', false)) {
     nav.background.video = {
-      src: setFile(process.env.BACKEND_URL + cmsContent.field_state_nav_bg_video.field_media_video_file.uri.url),
+      src: setFile(cmsContent.field_state_nav_bg_video.field_media_video_file.uri.url),
       type: _.get(cmsContent, 'field_state_nav_bg_video.field_media_video_file.filemime', '')
     }
 
@@ -281,19 +287,19 @@ const createLayout = (body) => {
 
   explore.section.info.desc = getHeader(cmsContent, 'field_state_explore_desc')
 
-  explore.section.info.logo = setFile(process.env.BACKEND_URL + cmsContent.field_logo.image.uri.url)
+  explore.section.info.logo = setFile(cmsContent.field_logo.image.uri.url)
 
   if (filepath = _.get(cmsContent, 'field_state_explore_bg_img.image.uri.url', defaultAttractBgImg))
-    explore.background.img = setFile(process.env.BACKEND_URL + filepath)
+    explore.background.img = setFile(filepath)
 
   explore.section.interaction.map = _.get(cmsContent, 'field_explore_map', '')
 
   // Region section
-  region.section.info.logo = setFile(process.env.BACKEND_URL + cmsContent.field_logo.image.uri.url)
+  region.section.info.logo = setFile(cmsContent.field_logo.image.uri.url)
 
   if (filepath = _.get(cmsContent, 'field_state_region_bg_video.field_media_video_file.uri.url', false)) {
     region.background.video = {
-      src: setFile(process.env.BACKEND_URL + cmsContent.field_state_region_bg_video.field_media_video_file.uri.url),
+      src: setFile(cmsContent.field_state_region_bg_video.field_media_video_file.uri.url),
       type: _.get(cmsContent, 'field_state_region_bg_video.field_media_video_file.filemime', '')
     }
 
@@ -308,7 +314,7 @@ const createLayout = (body) => {
 
   explore.section.info.h2 = getHeader(cmsContent, 'field_state_storymap_translated_title')
 
-  storymap.section.info.logo = setFile(process.env.BACKEND_URL + cmsContent.field_logo.image.uri.url)
+  storymap.section.info.logo = setFile(cmsContent.field_logo.image.uri.url)
 
   // Write changes back to the layout.json file
   return layoutDefault
@@ -348,7 +354,7 @@ const createStorymaps = (body) => {
       secondaryColor = storymap.field_color_secondary.color
     }
 
-    const storyMapImage = setFile(process.env.BACKEND_URL + storyMapImageSrc)
+    const storyMapImage = setFile(storyMapImageSrc)
     if (storymap.field_translated_id !== null && storymap.field_translated_title !== null && storymap.field_translated_id.length > 0 && storymap.field_translated_title.length > 0)
       concatStorymap = { ...storymapTemplate, ...{id: storymap.field_id}, ...{uuid: storymap.id}, ...{name: storymap.field_story_map_title}, ...{language: 'en'}, ...{weight: storymap.field_weight}, ...{theme: {background: storyMapImage, color: {primary: primaryColor, secondary: secondaryColor}}}, ...{callout: {title: storymap.field_callout.field_heading, body: storymap.field_callout.body.value}}, ...{relationships: {id: storymap.field_translated_id}}, ...{titles: {primary: storymap.field_button_title, secondary: storymap.field_translated_button_title}}}
     else
@@ -356,7 +362,7 @@ const createStorymaps = (body) => {
 
     if (process.env.KIOSK_VERSION === 'cdi') {
       if (storymap.field_flag !== null) {
-        concatStorymap.theme.flag = setFile(process.env.BACKEND_URL + storymap.field_flag.image.uri.url)
+        concatStorymap.theme.flag = setFile(storymap.field_flag.image.uri.url)
       } else {
         concatStorymap.theme.flag = '/static/images/empty-flag.png'
       }
@@ -372,7 +378,7 @@ const createStorymaps = (body) => {
     if (storymap.field_media.meta && storymap.field_media.meta.story_map_header_image) {
       storyMapImageSrc = storymap.field_media.meta.story_map_header_image.url
     }
-    const storyMapImage = setFile(process.env.BACKEND_URL + storyMapImageSrc)
+    const storyMapImage = setFile(storyMapImageSrc)
 
     if (storymap.field_translated_id !== null && storymap.field_translated_title !== null && storymap.field_translated_id.length > 0 && storymap.field_translated_title.length > 0) {
       concatStorymap = { ...storymapTemplate, ...{id: storymap.field_translated_id},  ...{uuid: storymap.id + '-alt'}, ...{name: storymap.field_translated_title}, ...{language: 'es'}, ...{weight: storymap.field_weight}, ...{theme: {background: storyMapImage, color: {primary: '#' + storymap.field_color, secondary: ''}}}, ...{callout: {title: storymap.field_translated_callout.field_heading, body: storymap.field_translated_callout.body.value}}, ...{relationships: {id: storymap.field_id}}, ...{titles: {primary: storymap.field_button_title, secondary: storymap.field_translated_button_title}}}
