@@ -68,6 +68,7 @@ define([
       warning: 105,
       reset: 120
     };
+    var storymapCount = 0;
 
     // State controllers
     var active = {};
@@ -453,10 +454,20 @@ define([
       }
 
       ik.wrapper.state.set('wrapper-state', 'storymap');
+
+      ik.wrapper.storymapCounter();
     }
 
     this.getVersion = function () {
       return this.version;
+    }
+
+    this.storymapCounter = function () {
+      if (ik.wrapper.storymapCount > 14) {
+        console.log('Warning: Story Map count is', ik.wrapper.storymapCount);
+      }
+
+      ik.wrapper.storymapCount += 1;
     }
 
     /**
@@ -560,6 +571,8 @@ define([
         storymap: storymap
       },
       storymaps: storymaps,
+      storymapCount: storymapCount,
+      storymapCounter: this.storymapCounter,
       topic: topic
     }
   }
