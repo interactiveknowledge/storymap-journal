@@ -190,16 +190,18 @@ server.listen(3000, error => {
 
             mainWindow = createMainWindow()
 
-            loadingWindow.hide()
-
-            loadingWindow.close()
+            mainWindow.once('ready-to-show', () => {
+              loadingWindow.hide()
+              loadingWindow.close()
+              mainWindow.show()
+            })
           }
 
           // Send files remaining to loading window for progress bar
           events.on('remove-file', () => {
             let downloaded = events.total - events.file
             let percentage = parseInt(parseFloat(downloaded/events.total).toFixed(2) * 100)
-            loadingWindow.send('progress', { file: events.file, total: events.total, downloaded: downloaded, percentage: percentage })
+            loadingWindow.webContents.send('progress', { file: events.file, total: events.total, downloaded: downloaded, percentage: percentage })
           })
 
           events.on('finish-build', eventFinishBuildCallback)
