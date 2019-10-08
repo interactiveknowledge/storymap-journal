@@ -370,7 +370,15 @@ define([
       if (ik.wrapper.idle.current > ik.wrapper.idle.reset) {
           ik.wrapper.idle.current = 0;
           $('#idle-modal').hide();
-          window.location.reload();
+          var version = ik.wrapper.getVersion();
+
+          if (getUrlVar('username') && getUrlVar('password')) {
+            var username = getUrlVar('username');
+            var password = getUrlVar('password');
+            window.location.href = `http://localhost:3000/?version=${version}&username=${username}&password=${password}`;
+          } else {
+            window.location.href = `http://localhost:3000/?version=${version}`;
+          }
       }
     }, ik.wrapper.idle.interval);
 
@@ -407,6 +415,18 @@ define([
       }).then(function (response) {
         ik.map = response.map;
       });
+    }
+
+    if (getUrlVar('state') === 'storymap' && getUrlVar('id')) {
+      if (getUrlVar('region')) {
+        ik.wrapper.state.set('regionid', getUrlVar('region'));
+      }
+
+      if (getUrlVar('lang')) {
+        ik.wrapper.state.set('language', getUrlVar('lang'));
+      }
+
+      ik.wrapper.showStorymap(getUrlVar('id'), 1);
     }
   } // End init()
 
@@ -447,13 +467,20 @@ define([
       ik.wrapper.state.set('wrapper-state', 'region');
     }
 
-    this.showStorymap = function (appid) {
-      ik.wrapper.state.set('prev-wrapper-state', ik.wrapper.state.get('wrapper-state'));
-      if (ik.wrapper.state.get('appid') !== appid) {
-        ik.wrapper.state.set('appid', appid);
-      }
+    this.showStorymap = function (appid, pageReload = 0) {
+      if (pageReload === 0 && ik.wrapper.storymapCount > 14 && window.ipcRenderer) {
+        var regionid = ik.wrapper.state.get('regionid')
+        var version = ik.wrapper.getVersion();
+        var lang = ik.wrapper.state.get('language');
+        ipcRenderer.send('navigate-new-window', `http://localhost:3000/?version=${version}&state=storymap&region=${regionid}&id=${appid}&lang=${lang}`);
+      } else {
+        ik.wrapper.state.set('prev-wrapper-state', ik.wrapper.state.get('wrapper-state'));
+        if (ik.wrapper.state.get('appid') !== appid) {
+          ik.wrapper.state.set('appid', appid);
+        }
 
-      ik.wrapper.state.set('wrapper-state', 'storymap');
+        ik.wrapper.state.set('wrapper-state', 'storymap');
+      }
 
       ik.wrapper.storymapCounter();
     }

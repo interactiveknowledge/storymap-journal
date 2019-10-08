@@ -125,7 +125,7 @@ server.listen(3000, error => {
 
       // The Main Window loads 
       function createMainWindow () {
-        let mainWindow = new BrowserWindow({
+        const w = new BrowserWindow({
           fullscreen: process.env.ELECTRON_FULLSCREEN === '1',
           height: parseInt(process.env.ELECTRON_HEIGHT, 10),
           show: false,
@@ -138,11 +138,11 @@ server.listen(3000, error => {
           width: parseInt(process.env.ELECTRON_WIDTH, 10)
         })
 
-        mainWindow.on('closed', function () {
+        w.on('closed', function () {
           mainWindow = null
         })
 
-        let { webContents } = mainWindow
+        let { webContents } = w
 
         webContents.on('crashed', () => {
           // Log error
@@ -153,7 +153,7 @@ server.listen(3000, error => {
           // Destroy window and start over
           mainWindow.destroy()
 
-          let mainWindow = createMainWindow()
+          mainWindow = createMainWindow()
 
           mainWindow.on('ready-to-show', () => {
             mainWindow.show()
@@ -166,20 +166,20 @@ server.listen(3000, error => {
           webContents.setLayoutZoomLevelLimits(0, 0)
         })
 
-        mainWindow.removeMenu()
+        w.removeMenu()
 
-        mainWindow.loadURL(`http://localhost:3000?version=${process.env.KIOSK_VERSION}&username=${process.env.ESRI_USER}&password=${process.env.ESRI_PASSWORD}`)
+        w.loadURL(`http://localhost:3000?version=${process.env.KIOSK_VERSION}&username=${process.env.ESRI_USER}&password=${process.env.ESRI_PASSWORD}`)
 
-        return mainWindow
+        return w
       }
 
       // Start by showing the loading page until the building data is done.
       app.on('ready', () => {
         logger.info('App started.')
 
-        const loading = createLoadingWindow()
+        loadingWindow = createLoadingWindow()
 
-        loading.once('show', () => {
+        loadingWindow.once('show', () => {
 
           // Show the main window when event 'finish-build' is fired
           const eventFinishBuildCallback = () => {
@@ -188,20 +188,18 @@ server.listen(3000, error => {
 
             logger.info('Data has finished downloading from Drupal.')
 
-            let mainWindow = createMainWindow()
+            mainWindow = createMainWindow()
 
-            mainWindow.once('ready-to-show', () => {
-              loading.hide()
-              loading.close()
-              mainWindow.show()
-            })
+            loadingWindow.hide()
+
+            loadingWindow.close()
           }
 
           // Send files remaining to loading window for progress bar
           events.on('remove-file', () => {
             let downloaded = events.total - events.file
             let percentage = parseInt(parseFloat(downloaded/events.total).toFixed(2) * 100)
-            loading.webContents.send('progress', { file: events.file, total: events.total, downloaded: downloaded, percentage: percentage })
+            loadingWindow.send('progress', { file: events.file, total: events.total, downloaded: downloaded, percentage: percentage })
           })
 
           events.on('finish-build', eventFinishBuildCallback)
@@ -211,11 +209,11 @@ server.listen(3000, error => {
           build(events)
         })
 
-        loading.removeMenu()
+        loadingWindow.removeMenu()
 
-        loading.loadFile('./loading.html')
+        loadingWindow.loadFile('./loading.html')
 
-        loading.show()
+        loadingWindow.show()
       })
 
       app.on('window-all-closed', function () {
@@ -224,11 +222,11 @@ server.listen(3000, error => {
 
       app.on('activate', function () {
         if (!loadingWindow) {
-          let loadingWindow = createLoadingWindow()
+          loadingWindow = createLoadingWindow()
         }
 
         if (!mainWindow) {
-          let mainWindow = createMainWindow()
+          mainWindow = createMainWindow()
 
           mainWindow.on('ready-to-show', () => {
             mainWindow.show()
@@ -267,6 +265,10 @@ server.listen(3000, error => {
         }
       
         logger[arg.type](arg.message)
+      })
+
+      ipcMain.on('navigate-new-window', (event, arg) => {
+        mainWindow.loadURL(arg)
       })
     } else {
       build(events)

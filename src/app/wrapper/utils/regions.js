@@ -12,7 +12,7 @@ define([], function () {
      */
     var get = function (appid) {
       return ik.wrapper.regions.filter(function (region) {
-        return (region.id === appid) ? region : false;
+        return (region.id == appid) ? region : false;
       })
     }
 
