@@ -369,7 +369,7 @@ define([
       if (ik.wrapper.idle.current > ik.wrapper.idle.reset) {
           ik.wrapper.idle.current = 0;
           $('#idle-modal').hide();
-          ik.wrapper.showAttract();
+          window.location.reload();
       }
     }, ik.wrapper.idle.interval);
 
