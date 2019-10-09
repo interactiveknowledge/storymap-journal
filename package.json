@@ -54,6 +54,8 @@
     "jsona": "^1.5.0",
     "lodash": "^4.17.15",
     "os": "^0.1.1",
-    "underscore": "^1.9.1"
+    "underscore": "^1.9.1",
+    "universal-analytics": "^0.4.20",
+    "uuid": "^3.3.3"
   }
 }

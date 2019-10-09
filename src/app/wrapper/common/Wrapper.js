@@ -84,6 +84,10 @@ define([
     var menu = {};
     var bottom = {};
 
+    if (window.visitor) {
+      window.visitor.set('uid', window.user)
+    }
+
     var init = function() {
       console.log('wrapper.common.Wrapper - init');
 
@@ -335,6 +339,11 @@ define([
     });
 
     var resetIdleTimer = function () {
+      // Analytics
+      if (ik.wrapper.idle.current > ik.wrapper.idle.warning && ik.wrapper.idle.current < ik.wrapper.idle.reset) {
+        ik.wrapper.analytics.event('Kiosk', 'Idle Timeout Canceled', 'User has cancelled the idle timer.');
+      }
+
       ik.wrapper.idle.current = 0;
       $('#idle-modal').hide();
     }
@@ -439,6 +448,8 @@ define([
     }
 
     this.showAttract = function () {
+      ik.wrapper.analytics.pageView('/attract', 'Attract Screen');
+
       ik.wrapper.state.set('prev-wrapper-state', ik.wrapper.state.get('wrapper-state'));
       ik.wrapper.state.set('wrapper-state', 'attract');
     }
@@ -454,12 +465,22 @@ define([
     }
 
     this.showNav = function () {
+      ik.wrapper.analytics.pageView('/main-navigation', 'Main Story Map Navigation Screen');
+
       ik.wrapper.state.set('prev-wrapper-state', ik.wrapper.state.get('wrapper-state'));
       ik.wrapper.state.set('wrapper-state', 'nav');
     }
 
     this.showRegion = function (regionid) {
-      ik.wrapper.state.set('prev-wrapper-state', ik.wrapper.state.get('wrapper-state'));
+      // Analytics
+      ik.wrapper.analytics.pageView('/region-navigation', 'Region Story Map Navigation Screen');
+
+      var currentState = ik.wrapper.state.get('wrapper-state');
+      if (currentState === 'nav') {
+        ik.wrapper.analytics.event('Kiosk', 'Main Menu Region Selected', 'The user has selected a region from the main menu of the CDI.');
+      }
+
+      ik.wrapper.state.set('prev-wrapper-state', currentState);
       if (ik.wrapper.state.get('regionid') !== regionid) {
         ik.wrapper.state.set('regionid', regionid);
       }
@@ -468,6 +489,18 @@ define([
     }
 
     this.showStorymap = function (appid, pageReload = 0) {
+      // Analytics
+      ik.wrapper.analytics.pageView('/storymap', 'Story Map');
+      if (ik.wrapper.getVersion() === 'cdi') {
+        var featuredRegion = ik.wrapper.api.region.getFeaturedRegion();
+        var currentRegion = ik.wrapper.state.get('regionid');
+
+        if (parseInt(featuredRegion) !== parseInt(currentRegion)) {
+          ik.wrapper.analytics.event('Kiosk', 'Non-featured Region Story Map', 'This story map is from a region which was not featured by the kiosk.');
+        }
+      }
+
+
       if (pageReload === 0 && ik.wrapper.storymapCount > 14 && window.ipcRenderer) {
         var regionid = ik.wrapper.state.get('regionid')
         var version = ik.wrapper.getVersion();
@@ -516,9 +549,14 @@ define([
               if (region !== undefined && region > 0) {
                 ik.wrapper.showRegion(region);
               } else {
+                // Analytics
+                ik.wrapper.analytics.event('Kiosk', 'Kiosk Navigation', 'View All Regions');
+
                 ik.wrapper.showNav();
               }
             } else {
+              // Analytics
+              ik.wrapper.analytics.event('Story Map', 'Story Map Navigation Back', 'The user has navigated back one section in the story map.');
               ik.wrapper.topic.publish('story-navigate-section', index - 1);
             }
           }, 1000));
@@ -532,6 +570,9 @@ define([
             var length = app.data.getStoryLength();
 
             if (index + 1 < length) {
+              // Analytics
+              ik.wrapper.analytics.event('Story Map', 'Story Map Navigation Next', 'The user has navigated next one section in the story map.');
+
               ik.wrapper.topic.publish('story-navigate-section', index + 1);
             }
           }, 1000));
@@ -566,10 +607,35 @@ define([
       }
     }
 
+    this.event = function (category, action, label = null, path = null) {
+      if (window.visitor) {
+        window.visitor.event({
+          ec: category,
+          ea: action,
+          el: label,
+          dp: path
+        }).send()
+      }
+    }
+
+    this.pageView = function (path, title) {
+      if (window.visitor) {
+        window.visitor.pageview({
+          dp: path,
+          dt: title,
+          ds: window.user
+        }).send()
+      }
+    }
+
     return {
       api: {
         storymap: apiStorymap,
         region: apiRegion
+      },
+      analytics: {
+        event: this.event,
+        pageView: this.pageView
       },
       init: init,
       createLinks: createLinks,

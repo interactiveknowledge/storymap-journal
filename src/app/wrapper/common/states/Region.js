@@ -51,6 +51,10 @@ define([
         if (currentIndex === slides.length - 1) {
           btnNext.setAttribute('disabled', true);
         }
+
+        // analytics
+        ik.wrapper.analytics.event('Kiosk', 'Menu Navigation', 'More Countries Next');
+
         transformFrame(currentIndex);
       }
 
@@ -66,6 +70,9 @@ define([
         if (currentIndex === 0) {
           btnPrev.setAttribute('disabled', true);
         }
+
+        ik.wrapper.analytics.event('Kiosk', 'Menu Navigation', 'More Countries Previous');
+
         transformFrame(currentIndex);
       }
 
