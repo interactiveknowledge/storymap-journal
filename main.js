@@ -339,6 +339,10 @@ server.listen(3000, error => {
       ipcMain.on('log-message-to-file', logMessageToFile)
 
       ipcMain.on('navigate-new-window', (event, arg) => {
+        logMessageToFile(event, {
+          type: 'info',
+          message: 'Electron reloading window to reset WebGL contexts.'
+        })
         mainWindow.loadURL(arg)
       })
     } else {
