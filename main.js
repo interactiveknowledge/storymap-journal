@@ -1,6 +1,10 @@
 // Node API
 const fs = require('fs')
+const os = require('os')
 const path = require('path')
+
+// Installed packages
+const axios = require('axios')
 
 // Local API
 const build = require('./server/build')
@@ -9,6 +13,8 @@ const events = require('./server/events')
 // Installed packages
 const express = require('express')
 
+// Import package info
+const pkg = require('./package.json')
 
 // Import environment specific configuration
 const localConfig = require('dotenv').config({
@@ -16,6 +22,9 @@ const localConfig = require('dotenv').config({
 }).parsed
 
 process.env = { ...localConfig, ...process.env,}
+
+const platform = os.platform()
+const user = os.userInfo().username
 
 const dev = (process.env.ENV === 'dev')
 const environmentLongName = (dev === true) ? 'Development' : 'Production'
@@ -68,12 +77,19 @@ server.listen(3000, error => {
     }
 
     if (process.env.BUILD_TARGET === 'electron') {
-      const { app, BrowserWindow, ipcMain } = require('electron')
+      const { app, BrowserWindow, ipcMain, ipcRenderer } = require('electron')
 
       const logger = require('electron-log')
       let loadingWindow
       let mainWindow
 
+      /**
+       * notify Sentry of errors and other things.
+       *
+       * @param {*} message
+       * @param {*} level
+       * @param {*} exception
+       */
       const notifySentry = (message, level, exception = true) => {
         if (process.env.ENV === 'production') {
           if (process.env.SENTRY_DSN) {
@@ -106,6 +122,59 @@ server.listen(3000, error => {
         } else {
           logger.error(message)
         }
+      }
+
+    /**
+     * Send log message to remote URL
+     *
+     * @param {string} message
+     * @param {string} level
+     * @param {boolean} [override=false]
+     *   whether to override the level. (only log warn, errors or fatals but sometimes we want the info or debug levels to get sent)
+     */
+    const logRemotely = (message, level, override = false) => {
+      if (process.env.REMOTE_LOG_URL && process.env.ENV === 'production') {
+          if (level === 'warn' || level === 'warning' || level === 'error' || level === 'fatal' || level === 'info' || override === true) {
+            axios.post(process.env.REMOTE_LOG_URL, {
+              application: pkg.productName || pkg.name,
+              version: pkg.version,
+              user: user,
+              level: level,
+              message: message
+            })
+          }
+        }
+      }
+
+      /**
+       * Handle all electron messaging.
+       * 
+       * @param {*} event
+       *   Optional but exists to pass into ipcMain event callbacks.
+       * @param {*} arg
+       *   Object with a 'type' and 'message' property.
+       */
+      const logMessageToFile = (event = {}, arg) => {
+        // Only log warnings, errors and fatals to sentry.
+        const sentry = ['warning', 'error', 'fatal']
+        if (process.env.ENV === 'production' && sentry.indexOf(arg.type) !== -1) {
+          if (arg.type === 'warn') {
+            arg.type = 'warning'
+          }
+          notifySentry(arg.message, arg.type, false)
+        }
+
+        // Adjust to match logger's types.
+        if (arg.type === 'warning') {
+          arg.type = 'warn'
+        }
+
+        if (arg.type === 'fatal') {
+          arg.type = 'error'
+        }
+      
+        logRemotely(arg.message, arg.type)
+        logger[arg.type](arg.message)
       }
 
       // Loading window will appear while files are downloading
@@ -146,9 +215,10 @@ server.listen(3000, error => {
 
         webContents.on('crashed', () => {
           // Log error
-          const message = 'App crashed! Creating new window.'
-          notifySentry(message, 'error', false)
-          logger.error(message)
+          logMessageToFile({}, {
+            type: 'error',
+            message: 'App crashed! Creating new window.'
+          })
 
           // Destroy window and start over
           mainWindow.destroy()
@@ -175,7 +245,8 @@ server.listen(3000, error => {
 
       // Start by showing the loading page until the building data is done.
       app.on('ready', () => {
-        logger.info('App started.')
+        const message = `Kiosk ${pkg.name} has started.`
+        logRemotely(message, 'info', true)
 
         loadingWindow = createLoadingWindow()
 
@@ -186,7 +257,10 @@ server.listen(3000, error => {
             // Remove listener to prevent any chance of duplicate windows
             events.removeListener('finish-build', eventFinishBuildCallback)
 
-            logger.info('Data has finished downloading from Drupal.')
+            logMessageToFile({}, {
+              type: 'info',
+              message: `Data has finished downloading from Drupal from Kiosk UUID is ${process.env.KIOSK_UUID}.`
+            })
 
             mainWindow = createMainWindow()
 
@@ -207,7 +281,11 @@ server.listen(3000, error => {
           events.on('finish-build', eventFinishBuildCallback)
 
           // Build data from the CMS
-          logger.info('Start building data from Drupal.')
+          logMessageToFile({}, {
+            type: 'info',
+            message: `Start building data from Drupal. Kiosk UUID is ${process.env.KIOSK_UUID}.`
+          })
+
           build(events)
         })
 
@@ -237,37 +315,28 @@ server.listen(3000, error => {
       })
 
       app.on('quit', () => {
-        notifySentry('App closed.', 'info', false)
-        logger.info('App closed.')
+        logMessageToFile({}, {
+          type: 'info',
+          message: 'App closed.'
+        })
       })
       
       app.on('uncaughException', error => {
-        notifySentry(error, 'error')
-        logger.error(error)
+        logMessageToFile({}, {
+          type: 'error',
+          message: error
+        })
       })
       
       app.on('unhandledRejection', error => {
-        notifySentry(error, 'error')
-        logger.error(error)
+        logMessageToFile({}, {
+          type: 'error',
+          message: error
+        })
       })
 
       // Log to a file that holds a log of useful information
-      ipcMain.on('log-message-to-file', (event, arg) => {
-        // Only log warnings, errors and fatals to sentry.
-        const sentry = ['warning', 'error', 'fatal']
-        if (process.env.ENV === 'production' && sentry.indexOf(arg.type) !== -1) {
-          if (arg.type === 'warn') {
-            arg.type = 'warning'
-          }
-          notifySentry(arg.message, arg.type, false)
-        }
-      
-        if (arg.type === 'warning') {
-          arg.type = 'warn'
-        }
-      
-        logger[arg.type](arg.message)
-      })
+      ipcMain.on('log-message-to-file', logMessageToFile)
 
       ipcMain.on('navigate-new-window', (event, arg) => {
         mainWindow.loadURL(arg)
