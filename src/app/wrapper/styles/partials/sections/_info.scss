@@ -17,7 +17,7 @@
   @include infoHeader();
 }
 
-.info__explore {
+.info__explore, .info__active {
   &__content {
     @include flex(column, space-between, space-between);
     height: 100%;

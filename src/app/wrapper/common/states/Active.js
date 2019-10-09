@@ -30,8 +30,8 @@ define([
     var show = function () {
       $('.fullscreen-bg').css('background-image', 'url(' + ik.wrapper.layout.state.active.background.img + ')');
 
-      // Do not show the menu
       $('#menu').children().hide();
+      $('.menu__active').show();
 
       // Interaction Element
       $('#interaction').children().hide();
@@ -41,6 +41,7 @@ define([
       $('.info__active').show();
 
       $('#bottom').children().hide();
+      $('.bottom__active').show();
     }
 
     return {

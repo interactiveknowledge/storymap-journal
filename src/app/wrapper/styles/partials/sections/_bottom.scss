@@ -9,7 +9,7 @@
   flex: 1;
 }
 
-.storymap #bottom {
+#active, #bottom {
   background-image: linear-gradient(180deg, $bottom-background-linear-1 0%, $bottom-background-linear-2 44%);
 }
 

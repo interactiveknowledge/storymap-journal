@@ -233,7 +233,7 @@ const createLayout = (body) => {
   let defaultAttractBgImg = staticPath + '/image/attract-background.png'
 
   // Write layout information
-  const { attract, explore, nav, region, storymap } = layoutDefault.state
+  const { active, attract, explore, nav, region, storymap } = layoutDefault.state
 
   // Attract section
   attract.section.info.h1 = getHeader(cmsContent, 'title')
@@ -256,6 +256,16 @@ const createLayout = (body) => {
     // Check for MOV files
     if (attract.background.video.type === 'video/quicktime')
       attract.background.video.type = 'video/mp4'
+  }
+
+  // Active section
+  if (process.env.KIOSK_VERSION === 'llc') {
+    active.section.info.h1 = getHeader(cmsContent, 'title')
+    active.section.info.h2 = getHeader(cmsContent, 'field_translated_title')
+    active.section.info.logo = setFile(cmsContent.field_logo.image.uri.url)
+
+    if (filepath = _.get(cmsContent, 'field_state_active_bg_img.image.uri.url', defaultAttractBgImg))
+      active.background.img = setFile(filepath)
   }
 
   // Nav section

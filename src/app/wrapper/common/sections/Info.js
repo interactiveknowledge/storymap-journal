@@ -46,7 +46,10 @@ define([
      */
 
     this.renderActive = function () {
-      $('.info__active').html(infoActiveTpl(layout.getInfo()))
+      var renderData = layout.getInfo();
+      renderData.h1 = 'Why LEAF Matters';
+      renderData.desc = 'This is my description text';
+      $('.info__active').html(infoActiveTpl(renderData));
     }
 
     this.renderAttract = function () {

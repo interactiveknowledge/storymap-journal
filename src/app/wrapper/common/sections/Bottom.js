@@ -1,6 +1,8 @@
 define([
+  'lib-build/tpl!../../tpl/sections/Bottom/Active',
   'lib-build/tpl!../../tpl/sections/Bottom/Storymap',
 ], function (
+  bottomActiveTpl,
   bottomStorymapTpl
 ) {
   return function Bottom () {
@@ -8,6 +10,9 @@ define([
       var currentState = ik.wrapper.state.get('wrapper-state');
 
       switch (currentState) {
+        case 'active':
+          this.renderActive();
+          break;
         case 'explore':
           this.renderExplore();
           break;
@@ -23,6 +28,10 @@ define([
      * Render Templates
      * Bind Javascript Events
      */
+
+    this.renderActive = function () {
+      $('.bottom__active').html(bottomActiveTpl({}));
+    }
 
     this.renderExplore = function () {
       // this.renderStorymap = function () {

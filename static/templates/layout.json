@@ -1,5 +1,19 @@
 {
   "state": {
+    "active": {
+      "background": {
+        "img": "",
+        "video": ""
+      },
+      "section": {
+        "info": {
+          "logo": "",
+          "h1": "",
+          "h2": ""
+        },
+        "interaction": {}
+      }
+    },
     "attract": {
       "background": {
         "img": "",
