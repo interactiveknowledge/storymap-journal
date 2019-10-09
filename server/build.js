@@ -465,6 +465,8 @@ module.exports = async (event) => {
     map.set('include', [
         'field_logo',
         'field_logo.image',
+        'field_state_active_bg_img',
+        'field_state_active_bg_img.image',
         'field_state_attract_bg_img',
         'field_state_attract_bg_img.image',
         'field_state_attract_bg_video',

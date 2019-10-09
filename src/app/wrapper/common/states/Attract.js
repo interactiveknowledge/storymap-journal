@@ -19,7 +19,7 @@ define([
 
       $('#menu').children().hide();
 
-      var action = 'nav';
+      var action = 'active';
       var targetId = 0;
       if (ik.wrapper.getVersion() === 'cdi') {
         var action = 'region';
@@ -40,6 +40,8 @@ define([
       var infoData = ik.wrapper.layout.state.attract.section.info;
       infoData.action = action;
       infoData.targetId = targetId;
+
+      console.log(action);
 
       $('.info__attract').html(attractInfoTpl(infoData));
 
