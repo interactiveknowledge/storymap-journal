@@ -79,42 +79,6 @@ const regionTemplate = {
   }
 }
 
-const notifySentry = (message, level) => {
-  if (process.env.ENV === 'production') {
-    if (process.env.SENTRY_DSN) {
-      let Sentry
-
-      if (process.env.BUILD_TARGET === 'electron') {
-        Sentry = require('@sentry/electron')
-      } else {
-        Sentry = require('@sentry/node')
-      }
-
-      const os = require('os')
-      const user = os.userInfo().username
-      const pkg = require('../package.json')
-
-      Sentry.init({ dsn: process.env.SENTRY_DSN })
-
-      Sentry.configureScope((scope) => {
-        scope.setUser({ 'username': user })
-        scope.setTag('platform', os.platform())
-        scope.setTag('version', pkg.version)
-        scope.setTag('kiosk_version', process.env.KIOSK_VERSION)
-        if (process.env.KIOSK_VERSION === 'cdi') {
-          scope.setTag('cdi_region', process.env.KIOSK_REGION)
-        }
-        scope.setTag('drupal_kiosk_uuid', KIOSK_UUID)
-        scope.setLevel(level)
-      })
-
-      Sentry.captureException(message)
-    }
-  } else {
-    console.error(message)
-  }
-}
-
 /**
  * capture the image derivatives from the response data and append it 
  * to the JSONa object which does not process meta objects
@@ -183,20 +147,14 @@ const writeJsonToFile = (path = '', json = {}) => {fs.writeFileSync(path, JSON.s
  * @return {[String]}
  */
 const setFile = (fileuri) => {
-  if (fileuri.indexOf(localFilesPath) === 0) {
-    return fileuri.replace(localFilesPath, '/static')
+  if (fileuri.indexOf(staticPath) === 0) {
+    return fileuri.replace(staticPath, '/static')
   }
 
   fileuri = process.env.BACKEND_URL + fileuri
 
   const absFilepath = downloadPath + decodeURIComponent(url.parse(fileuri).pathname)
   const relFilepath = '/dynamic/download' + decodeURIComponent(url.parse(fileuri).pathname)
-
-  // @TODO - Decide if keeping this logic is necessary
-  // No need to download the same file twice, if already exists
-  // if (fs.existsSync(absFilepath) === true) {
-  //   return relFilepath
-  // }
 
   if (fs.existsSync(path.dirname(absFilepath)) === false) {
     fs.mkdirSync(path.dirname(absFilepath), { recursive: true })
@@ -217,7 +175,7 @@ const setFile = (fileuri) => {
 
       res.data.pipe(writeStream)
     }).catch(error => {
-      notifySentry(error, 'error')
+      this.event.emit('build-error', error)
     })
 
   return relFilepath
@@ -337,7 +295,7 @@ const createStorymaps = (body) => {
 
   appendImageDerivatives(cmsContent, body)
 
-  writeJsonToFile(staticPath + '/download/storymaps.json', cmsContent)
+  writeJsonToFile(downloadPath + '/storymaps.json', cmsContent)
 
   let storyMapList
   let primaryColor = null
@@ -407,7 +365,7 @@ const createRegions = (body, featuredRegion) => {
   const cmsContent = formatter.deserialize(body)
 
   // Save file for future reference
-  writeJsonToFile(staticPath + '/download/regions.json', cmsContent)
+  writeJsonToFile(downloadPath + '/regions.json', cmsContent)
 
   const regions = cmsContent.map((region, index) => {
     return {
@@ -432,7 +390,7 @@ const createRegions = (body, featuredRegion) => {
 /**
  * Export the logic so that the 
  */
-module.exports = async (event) => {
+module.exports = async (event, logger) => {
   const { BACKEND_URL, KIOSK_VERSION, KIOSK_UUID } = process.env
 
   /**
@@ -525,7 +483,7 @@ module.exports = async (event) => {
     // Pass the kiosk data outside this scope
     kioskResponse = formatter.deserialize(response.data)
   } catch (error) {
-    notifySentry(error, 'error')
+    this.event.emit('build-error', error)
   }
 
   if (KIOSK_VERSION === 'cdi') {
@@ -596,7 +554,7 @@ module.exports = async (event) => {
       writeJsonToFile(apiPath + '/storymaps.json', storymapApi)
       writeJsonToFile(apiPath + '/regions.json', newRegions)
     } catch (error) {
-      notifySentry(error, 'error')
+      this.event('build-error', error)
     }
   }
 }

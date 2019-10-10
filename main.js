@@ -21,11 +21,11 @@ const localConfig = require('dotenv').config({
   path: path.resolve(__dirname, '.env')
 }).parsed
 
+// Concat the environment variables
 process.env = { ...localConfig, ...process.env,}
 
-const platform = os.platform()
+// Set up useful variables
 const user = os.userInfo().username
-
 const dev = (process.env.ENV === 'dev')
 const environmentLongName = (dev === true) ? 'Development' : 'Production'
 const environmentPath = (dev === true) ? 'src' : 'deploy'
@@ -291,6 +291,13 @@ server.listen(3000, error => {
 
           events.on('finish-build', eventFinishBuildCallback)
 
+          events.on('build-error', (error) => {
+            logMessageToFile({}, {
+              type: 'error',
+              message: error
+            })
+          })
+
           // Build data from the CMS
           logMessageToFile({}, {
             type: 'info',
@@ -357,6 +364,10 @@ server.listen(3000, error => {
         mainWindow.loadURL(arg)
       })
     } else {
+      events.on('build-error', (error) => {
+        console.error(error)
+      })
+
       build(events)
     }
   }
