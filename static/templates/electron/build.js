@@ -1,7 +1,7 @@
 module.exports = {
   appId: "com.interactiveknowledge.storymaps",
   productName: "Story Map Wrapper",
-  asar: false,
+  asar: true,
   directories: {
     buildResources: "./",
     output: "release"

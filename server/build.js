@@ -1,5 +1,6 @@
 // Node API
 const fs = require('fs')
+const os = require('os')
 const path = require('path')
 const url = require('url')
 
@@ -13,7 +14,13 @@ const { Jsona } = jsona
 const formatter = new Jsona()
 
 // Set up local paths for files
-const apiPath = path.join(__dirname, '../api')
+const localFilesPath = require("os").homedir() + '/.storymap-kiosk'
+
+if (fs.existsSync(localFilesPath) === false) {
+  fs.mkdirSync(localFilesPath, { recursive: true })
+}
+
+const apiPath = localFilesPath + '/api'
 
 if (fs.existsSync(apiPath) === false) {
   fs.mkdirSync(apiPath, { recursive: true })
@@ -25,7 +32,7 @@ if (fs.existsSync(staticPath) === false) {
   fs.mkdirSync(staticPath, { recursive: true })
 }
 
-const downloadPath = staticPath + '/download'
+const downloadPath = localFilesPath + '/download'
 
 if (fs.existsSync(downloadPath) === false) {
   fs.mkdirSync(downloadPath, { recursive: true })
@@ -176,14 +183,14 @@ const writeJsonToFile = (path = '', json = {}) => {fs.writeFileSync(path, JSON.s
  * @return {[String]}
  */
 const setFile = (fileuri) => {
-  if (fileuri.indexOf(staticPath) === 0) {
-    return fileuri.replace(staticPath, '/static')
+  if (fileuri.indexOf(localFilesPath) === 0) {
+    return fileuri.replace(localFilesPath, '/static')
   }
 
   fileuri = process.env.BACKEND_URL + fileuri
 
-  const absFilepath = staticPath + '/download' + decodeURIComponent(url.parse(fileuri).pathname)
-  const relFilepath = '/static/download' + decodeURIComponent(url.parse(fileuri).pathname)
+  const absFilepath = downloadPath + decodeURIComponent(url.parse(fileuri).pathname)
+  const relFilepath = '/dynamic/download' + decodeURIComponent(url.parse(fileuri).pathname)
 
   // @TODO - Decide if keeping this logic is necessary
   // No need to download the same file twice, if already exists
@@ -225,7 +232,7 @@ const createLayout = (body) => {
   const cmsContent = formatter.deserialize(body)
 
   // Save file for future reference
-  writeJsonToFile(staticPath + '/download/kiosk.json', cmsContent)
+  writeJsonToFile(localFilesPath + '/download/kiosk.json', cmsContent)
 
   // Get the default layout file
   const layoutDefault = JSON.parse(fs.readFileSync(staticPath + '/templates/layout.json', 'utf8'))
