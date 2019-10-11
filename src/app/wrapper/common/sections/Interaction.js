@@ -8,7 +8,8 @@ define([
   'lib-build/tpl!../../tpl/tags/img',
   'lib-build/tpl!../../tpl/svg/leaf',
   'esri/arcgis/utils',
-  "dojo/on"
+  "dojo/on",
+  "lib-app/vimeo/vimeo"
 ], function (
   interactionActiveTpl,
   interactionAttractTpl,
@@ -19,7 +20,8 @@ define([
   imgTag,
   leafLogo,
   esriUtils,
-  on
+  on,
+  vimeo
 ) {
   return function Interaction () {
     var render = function () {
@@ -59,6 +61,17 @@ define([
       $(activeClass + ' [data-nav]').each(function (i,ele) {
         ik.wrapper.createLinks($(ele));
       });
+
+      var iframe = document.querySelector('iframe');
+      var player = new vimeo(iframe);
+
+      player.on('ended', function () {
+        setTimeout(function () {
+          ik.wrapper.state.set('wrapper-state', 'nav');
+        }, 1500)
+      });
+
+      player.play();
     }
 
     this.renderAttract = function () {
