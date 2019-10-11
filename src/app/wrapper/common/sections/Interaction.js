@@ -80,7 +80,22 @@ define([
     this.renderNav = function () {
       var activeClass = '.interaction__nav';
 
-      $(activeClass).html(interactionNavTpl());
+      var version = ik.wrapper.state.get('version');
+
+      var navObj = {
+        en: '',
+        es: ''
+      };
+
+      if (version === 'cdi') {
+        navObj.en = 'Please Select:';
+        navObj.es = 'Por favor seleccione';
+      } else {
+        navObj.en = 'Explore Our Areas of Focus:';
+        navObj.es = 'Explorar nuestras áreas de foque';
+      }
+
+      $(activeClass).html(interactionNavTpl(navObj));
 
       var currentLanguage = ik.wrapper.state.get('language');
 
@@ -103,8 +118,6 @@ define([
         action = 'region'
         buttons = ik.wrapper.api.region.getAll();
       }
-
-      console.log(buttons)
 
       // Create navigation buttons
       buttons.forEach(function (button, index) {

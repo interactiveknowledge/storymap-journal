@@ -36,8 +36,8 @@ define([
   Nav,
   Region,
   Storymap,
-  Interaction,
   Info,
+  Interaction,
   Menu,
   Bottom,
   tplIdleModal,
@@ -589,6 +589,24 @@ define([
             if (index > 0) {
               ik.wrapper.topic.publish('story-navigate-section', 0);
             }
+          });
+          break;
+        case 'active-language':
+          element.click(function (e) {
+            e.preventDefault();
+
+            var language = $('.menu__active__wrapper__buttons__language').data('language') || null;
+
+            if (language) {
+              ik.wrapper.state.set('language', language);
+            }
+
+            ik.wrapper.sections.info.render();
+            ik.wrapper.sections.menu.render();
+
+            $('.menu__active [data-nav]').each(function (i, ele) {
+              ik.wrapper.createLinks($(ele));
+            });
           });
           break;
         default:

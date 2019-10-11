@@ -41,8 +41,6 @@ define([
       infoData.action = action;
       infoData.targetId = targetId;
 
-      console.log(action);
-
       $('.info__attract').html(attractInfoTpl(infoData));
 
       $('.info__attract [data-nav]').each(function (i, ele) {

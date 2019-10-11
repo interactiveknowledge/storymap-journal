@@ -131,23 +131,6 @@
       & .arrow {
         right: -5px;
       }
-
-      &:nth-of-type(1), &:nth-of-type(6) {
-        flex-basis: 100%;
-
-        button {
-          clip-path: url('#nav-button-clipping-path-explore');
-          width: 570px;
-
-          div {
-            flex-basis: 400px;
-          }
-        }
-
-        & .arrow {
-          right: 208px;
-        }
-      }
     }
   }
 }
