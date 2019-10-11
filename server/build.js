@@ -1,5 +1,6 @@
 // Node API
 const fs = require('fs')
+const os = require('os')
 const path = require('path')
 const url = require('url')
 
@@ -13,7 +14,13 @@ const { Jsona } = jsona
 const formatter = new Jsona()
 
 // Set up local paths for files
-const apiPath = path.join(__dirname, '../api')
+const localFilesPath = require("os").homedir() + '/.storymap-kiosk'
+
+if (fs.existsSync(localFilesPath) === false) {
+  fs.mkdirSync(localFilesPath, { recursive: true })
+}
+
+const apiPath = localFilesPath + '/api'
 
 if (fs.existsSync(apiPath) === false) {
   fs.mkdirSync(apiPath, { recursive: true })
@@ -25,7 +32,7 @@ if (fs.existsSync(staticPath) === false) {
   fs.mkdirSync(staticPath, { recursive: true })
 }
 
-const downloadPath = staticPath + '/download'
+const downloadPath = localFilesPath + '/download'
 
 if (fs.existsSync(downloadPath) === false) {
   fs.mkdirSync(downloadPath, { recursive: true })
@@ -69,42 +76,6 @@ const regionTemplate = {
       primary: '',
       secondary: ''
     }
-  }
-}
-
-const notifySentry = (message, level) => {
-  if (process.env.ENV === 'production') {
-    if (process.env.SENTRY_DSN) {
-      let Sentry
-
-      if (process.env.BUILD_TARGET === 'electron') {
-        Sentry = require('@sentry/electron')
-      } else {
-        Sentry = require('@sentry/node')
-      }
-
-      const os = require('os')
-      const user = os.userInfo().username
-      const pkg = require('../package.json')
-
-      Sentry.init({ dsn: process.env.SENTRY_DSN })
-
-      Sentry.configureScope((scope) => {
-        scope.setUser({ 'username': user })
-        scope.setTag('platform', os.platform())
-        scope.setTag('version', pkg.version)
-        scope.setTag('kiosk_version', process.env.KIOSK_VERSION)
-        if (process.env.KIOSK_VERSION === 'cdi') {
-          scope.setTag('cdi_region', process.env.KIOSK_REGION)
-        }
-        scope.setTag('drupal_kiosk_uuid', KIOSK_UUID)
-        scope.setLevel(level)
-      })
-
-      Sentry.captureException(message)
-    }
-  } else {
-    console.error(message)
   }
 }
 
@@ -182,14 +153,8 @@ const setFile = (fileuri) => {
 
   fileuri = process.env.BACKEND_URL + fileuri
 
-  const absFilepath = staticPath + '/download' + decodeURIComponent(url.parse(fileuri).pathname)
-  const relFilepath = '/static/download' + decodeURIComponent(url.parse(fileuri).pathname)
-
-  // @TODO - Decide if keeping this logic is necessary
-  // No need to download the same file twice, if already exists
-  // if (fs.existsSync(absFilepath) === true) {
-  //   return relFilepath
-  // }
+  const absFilepath = downloadPath + decodeURIComponent(url.parse(fileuri).pathname)
+  const relFilepath = '/dynamic/download' + decodeURIComponent(url.parse(fileuri).pathname)
 
   if (fs.existsSync(path.dirname(absFilepath)) === false) {
     fs.mkdirSync(path.dirname(absFilepath), { recursive: true })
@@ -210,7 +175,7 @@ const setFile = (fileuri) => {
 
       res.data.pipe(writeStream)
     }).catch(error => {
-      notifySentry(error, 'error')
+      this.event.emit('build-error', error)
     })
 
   return relFilepath
@@ -225,7 +190,7 @@ const createLayout = (body) => {
   const cmsContent = formatter.deserialize(body)
 
   // Save file for future reference
-  writeJsonToFile(staticPath + '/download/kiosk.json', cmsContent)
+  writeJsonToFile(localFilesPath + '/download/kiosk.json', cmsContent)
 
   // Get the default layout file
   const layoutDefault = JSON.parse(fs.readFileSync(staticPath + '/templates/layout.json', 'utf8'))
@@ -340,7 +305,7 @@ const createStorymaps = (body) => {
 
   appendImageDerivatives(cmsContent, body)
 
-  writeJsonToFile(staticPath + '/download/storymaps.json', cmsContent)
+  writeJsonToFile(downloadPath + '/storymaps.json', cmsContent)
 
   let storyMapList
   let primaryColor = null
@@ -410,7 +375,7 @@ const createRegions = (body, featuredRegion) => {
   const cmsContent = formatter.deserialize(body)
 
   // Save file for future reference
-  writeJsonToFile(staticPath + '/download/regions.json', cmsContent)
+  writeJsonToFile(downloadPath + '/regions.json', cmsContent)
 
   const regions = cmsContent.map((region, index) => {
     return {
@@ -435,7 +400,7 @@ const createRegions = (body, featuredRegion) => {
 /**
  * Export the logic so that the 
  */
-module.exports = async (event) => {
+module.exports = async (event, logger) => {
   const { BACKEND_URL, KIOSK_VERSION, KIOSK_UUID } = process.env
 
   /**
@@ -530,7 +495,7 @@ module.exports = async (event) => {
     // Pass the kiosk data outside this scope
     kioskResponse = formatter.deserialize(response.data)
   } catch (error) {
-    notifySentry(error, 'error')
+    this.event.emit('build-error', error)
   }
 
   if (KIOSK_VERSION === 'cdi') {
@@ -601,7 +566,7 @@ module.exports = async (event) => {
       writeJsonToFile(apiPath + '/storymaps.json', storymapApi)
       writeJsonToFile(apiPath + '/regions.json', newRegions)
     } catch (error) {
-      notifySentry(error, 'error')
+      this.event('build-error', error)
     }
   }
 }

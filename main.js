@@ -21,11 +21,11 @@ const localConfig = require('dotenv').config({
   path: path.resolve(__dirname, '.env')
 }).parsed
 
+// Concat the environment variables
 process.env = { ...localConfig, ...process.env,}
 
-const platform = os.platform()
+// Set up useful variables
 const user = os.userInfo().username
-
 const dev = (process.env.ENV === 'dev')
 const environmentLongName = (dev === true) ? 'Development' : 'Production'
 const environmentPath = (dev === true) ? 'src' : 'deploy'
@@ -37,20 +37,29 @@ if (dev === true) {
   console.log('Building', versionLongName)
 }
 
-// Set up directories
-const apiPath = path.join(__dirname, '../api')
+// Set up local paths for files
+const localFilesPath = require("os").homedir() + '/.storymap-kiosk'
+
+if (fs.existsSync(localFilesPath) === false) {
+  fs.mkdirSync(localFilesPath, { recursive: true })
+}
+
+// Api is writable and contains JSON layout and info files for kiosk
+const apiPath = localFilesPath + '/api'
 
 if (fs.existsSync(apiPath) === false) {
   fs.mkdirSync(apiPath, { recursive: true })
 }
 
-const staticPath = path.join(__dirname, '../static')
+// Static path contains templates and packaged assets
+const staticPath = path.join(__dirname, './static')
 
 if (fs.existsSync(staticPath) === false) {
   fs.mkdirSync(staticPath, { recursive: true })
 }
 
-const downloadPath = staticPath + '/download'
+// Download path is where content is downloaded
+const downloadPath = localFilesPath + '/download'
 
 if (fs.existsSync(downloadPath) === false) {
   fs.mkdirSync(downloadPath, { recursive: true })
@@ -61,9 +70,11 @@ const server = express()
 
 // Only need to serve static files
 // The Filesystem API
-server.use('/api', express.static(path.join(__dirname, './api')))
+server.use('/api', express.static(apiPath))
 // Static Files
-server.use('/static', express.static(path.join(__dirname, './static')))
+server.use('/static', express.static(staticPath))
+// Dynamic files
+server.use('/dynamic', express.static(localFilesPath))
 // The app
 server.use(express.static(path.join(__dirname, './' + environmentPath)))
 
@@ -280,6 +291,13 @@ server.listen(3000, error => {
 
           events.on('finish-build', eventFinishBuildCallback)
 
+          events.on('build-error', (error) => {
+            logMessageToFile({}, {
+              type: 'error',
+              message: error
+            })
+          })
+
           // Build data from the CMS
           logMessageToFile({}, {
             type: 'info',
@@ -346,6 +364,10 @@ server.listen(3000, error => {
         mainWindow.loadURL(arg)
       })
     } else {
+      events.on('build-error', (error) => {
+        console.error(error)
+      })
+
       build(events)
     }
   }
