@@ -415,6 +415,10 @@ define([
 
       container.html('');
 
+      console.log(ik.wrapper.layout.state.explore.section.interaction.map);
+      
+      ik.wrapper.state.set('mapid', ik.wrapper.layout.state.explore.section.interaction.map);
+
       var map = esriUtils.createMap(ik.wrapper.layout.state.explore.section.interaction.map, container[0], {
         mapOptions: {
           slider: true,
@@ -456,6 +460,7 @@ define([
     }
 
     this.showExplore = function (mapid) {
+      console.log(mapid);
       ik.wrapper.analytics.pageView('/explore', 'Explore Screen');
 
       ik.wrapper.state.set('prev-wrapper-state', ik.wrapper.state.get('wrapper-state'));

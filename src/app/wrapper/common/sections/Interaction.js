@@ -162,18 +162,46 @@ define([
       });
 
       if (ik.wrapper.getVersion() === 'llc') {
-        $('.nav__list__explore').append(NavigationButton({
-          action: 'explore',
-          alternate: 'Explore nuestra comunidad global',
-          alternateLanguage: 'es',
-          colorPrimary: '#715035',
-          colorSecondary: '#533B27',
-          colorText: '#fff',
-          currentLanguage: currentLanguage,
-          imgSrc: image,
-          targetId: ik.wrapper.layout.state.explore.section.interaction.map,
-          title: 'Explore Our Global Community'
-        }));
+        // Set up the back button
+        $('.nav__list__explore').html([
+          NavigationButton({
+            action: 'explore',
+            alternate: 'Explorar nuestra comunidad global',
+            alternateLanguage: 'es',
+            colorPrimary: '',
+            colorSecondary: '',
+            colorText: '#fff',
+            currentLanguage: currentLanguage,
+            imgSrc: '',
+            targetId: '',
+            title: 'Explore our Global Community'
+          }),
+          NavigationButton({
+            action: 'active',
+            alternate: 'Por qué LEAF es importante',
+            alternateLanguage: 'es',
+            colorPrimary: '',
+            colorSecondary: '',
+            colorText: '#fff',
+            currentLanguage: currentLanguage,
+            imgSrc: '',
+            targetId: '',
+            title: 'Video: Why LEAF Matters'
+          }),
+        ]);
+
+        // $('.nav__list__explore').append(NavigationButton({
+        //   action: 'explore',
+        //   alternate: 'Explore nuestra comunidad global',
+        //   alternateLanguage: 'es',
+        //   colorPrimary: '#715035',
+        //   colorSecondary: '#533B27',
+        //   colorText: '#fff',
+        //   currentLanguage: currentLanguage,
+        //   imgSrc: image,
+        //   targetId: ik.wrapper.layout.state.explore.section.interaction.map,
+        //   title: 'Explore Our Global Community'
+        // }));
       }
 
       // Bind events to links
@@ -311,16 +339,17 @@ define([
       var popup = null;
       var container = $('#explore-map');
 
-      container.html('');
+      // container.html('');
 
-      var map = esriUtils.createMap(mapid, container[0], {
-        mapOptions: {
-          slider: true,
-          nav:false
-        }
-      }).then(function (response) {
-        ik.map = response.map;
-      });
+      // console.log(mapid, container[0]);
+      // var map = esriUtils.createMap(mapid, container[0], {
+      //   mapOptions: {
+      //     slider: true,
+      //     nav:false
+      //   }
+      // }).then(function (response) {
+      //   ik.map = response.map;
+      // });
     }
 
     return {
