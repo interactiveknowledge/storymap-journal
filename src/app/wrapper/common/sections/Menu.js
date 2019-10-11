@@ -45,8 +45,21 @@ define([
     }
 
     this.renderActive = function () {
+      var currentLanguage = ik.wrapper.state.get('language');
+      var alternateLanguage = currentLanguage === 'en' ? 'es' : 'en';
+      var languageEn = menuTplLanguageEn({});
+      var languageEs = menuTplLanguageEs({});
+      var hamburger = menuTplHamburger({});
+
       $('.menu__active').html(menuTplActive({
-        color: '#C84107'
+        anotherLanguage: alternateLanguage,
+        buttonHamburger: hamburger,
+        buttonHamburgerNav: 'nav',
+        buttonHamburgerData: 0,
+        buttonLanguageEn: languageEn,
+        buttonLanguageEs: languageEs,
+        color: '#C84107',
+        language: currentLanguage
       }));
     }
 

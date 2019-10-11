@@ -42,6 +42,10 @@ define([
 
       $('#bottom').children().hide();
       $('.bottom__active').show();
+
+      $('.menu__active [data-nav]').each(function (i, ele) {
+        ik.wrapper.createLinks($(ele));
+      });
     }
 
     return {

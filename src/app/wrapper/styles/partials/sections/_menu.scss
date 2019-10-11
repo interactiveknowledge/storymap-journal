@@ -30,7 +30,7 @@
 }
 
 .menu {
-  &__storymap, &__explore {
+  &__active, &__storymap, &__explore {
     &__wrapper {
       @include flex(row, normal, space-between);
       background-image: url('/static/images/button-background.png');
@@ -69,11 +69,30 @@
 }
 
 .menu {
-  &__explore {
+  &__active, &__explore {
     &__wrapper {
       height: 70px;
     }
   }
+
+  &__active {
+    &__wrapper {
+      justify-content: flex-end;
+
+      button {
+        position: relative;
+        top: 6px;
+
+        svg .background {
+          fill: $what-is-leaf-secondary;
+        }
+      }
+    }
+  }
+}
+
+.menu__active__wrapper svg .background {
+  fill: $what-is-leaf-secondary;
 }
 
 .cdi-africa {

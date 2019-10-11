@@ -1,1 +1,14 @@
-<div class="menu__explore__wrapper" style="background-color: <%= color %>;"></div>
+<div class="menu__active__wrapper" style="background-color: <%= color %>;">
+  <div class="menu__active__wrapper__buttons">
+    <button data-nav="active" data-language="<%= (language === 'en') ? 'es' : 'en' %>">
+      <% if (language === 'en') { %>
+        <%= buttonLanguageEs %>
+      <% } else { %>
+        <%= buttonLanguageEn %>
+      <% } %>
+    </button>
+    <button data-nav="<%= buttonHamburgerNav %>" data-<%= buttonHamburgerNav %>="<%= buttonHamburgerData %>">
+      <%= buttonHamburger %>
+    </button>
+  </div>
+</div>
