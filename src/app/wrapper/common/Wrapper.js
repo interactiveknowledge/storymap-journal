@@ -258,7 +258,6 @@ define([
      */
     this.state.watch('video', function () {
       var bgVideo = $('.fullscreen-bg video').get(0);
-      console.dir(bgVideo);
 
       switch (ik.wrapper.state.get('video')) {
         case 'playing':
@@ -443,6 +442,8 @@ define([
      * Public methods, avail globally, which set the wrapper state.
      */
     this.showActive = function () {
+      ik.wrapper.analytics.pageView('/active', 'Active Screen');
+
       ik.wrapper.state.set('prev-wrapper-state', ik.wrapper.state.get('wrapper-state'));
       ik.wrapper.state.set('wrapper-state', 'active');
     }
@@ -455,6 +456,8 @@ define([
     }
 
     this.showExplore = function (mapid) {
+      ik.wrapper.analytics.pageView('/explore', 'Explore Screen');
+
       ik.wrapper.state.set('prev-wrapper-state', ik.wrapper.state.get('wrapper-state'));
 
       if (ik.wrapper.state.get('mapid') !== mapid) {
