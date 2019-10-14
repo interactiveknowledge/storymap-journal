@@ -199,11 +199,13 @@ define([
           case 'active':
             ik.wrapper.player.pause();
             break;
+          case 'storymap':
+            // LG-238: Will stop any currently playing videos and resets the storymap.
+            ik.wrapper.topic.publish('story-navigate-section', 0);
           case 'nav':
           case 'region':
           case 'active':
           case 'explore':
-          case 'storymap':
           default:
             // nothing
         }
