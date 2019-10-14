@@ -19,6 +19,10 @@ define([], function () {
     return ik.wrapper.layout.state[this.getState()].section.interaction;
   }
 
+  this.getBottom = function () {
+    return ik.wrapper.layout.state[this.getState()].section.bottom;
+  }
+
   // Set Data
   this.set = function (state, section, field, value) {
     if (section === 'background') {

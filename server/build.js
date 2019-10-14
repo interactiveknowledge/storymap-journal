@@ -231,6 +231,11 @@ const createLayout = (body) => {
 
     if (filepath = _.get(cmsContent, 'field_state_active_bg_img.image.uri.url', defaultAttractBgImg))
       active.background.img = setFile(filepath)
+
+    active.section.bottom.title = cmsContent.field_callout.field_heading
+    active.section.bottom.body = cmsContent.field_callout.body.value
+    active.section.bottom.translated.title = cmsContent.field_translated_callout.field_heading
+    active.section.bottom.translated.body = cmsContent.field_translated_callout.body.value
   }
 
   // Nav section
@@ -442,6 +447,8 @@ module.exports = async (event, logger) => {
   // Set a large amount of query parameters
   if (KIOSK_VERSION === 'llc') {
     map.set('include', [
+        'field_callout',
+        'field_translated_callout',
         'field_logo',
         'field_logo.image',
         'field_state_active_bg_img',
@@ -458,7 +465,7 @@ module.exports = async (event, logger) => {
         'field_story_map.field_callout',
         'field_story_map.field_translated_callout',
         'field_story_map.field_media',
-        'field_story_map.field_media.image'
+        'field_story_map.field_media.image',
       ].join(','))
   } else {
         map.set('include', [

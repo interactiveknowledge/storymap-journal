@@ -653,6 +653,7 @@ define([
             // Re-render sections
             ik.wrapper.sections.info.render();
             ik.wrapper.sections.menu.render();
+            ik.wrapper.sections.bottom.render();
 
             $('.menu__active [data-nav]').each(function (i, ele) {
               ik.wrapper.createLinks($(ele));

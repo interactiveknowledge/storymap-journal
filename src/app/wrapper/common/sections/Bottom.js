@@ -1,9 +1,11 @@
 define([
   'lib-build/tpl!../../tpl/sections/Bottom/Active',
   'lib-build/tpl!../../tpl/sections/Bottom/Storymap',
+  'wrapper/utils/layout'
 ], function (
   bottomActiveTpl,
-  bottomStorymapTpl
+  bottomStorymapTpl,
+  layout
 ) {
   return function Bottom () {
     var render = function () {
@@ -30,7 +32,16 @@ define([
      */
 
     this.renderActive = function () {
-      $('.bottom__active').html(bottomActiveTpl({}));
+      var kiosk = layout.getBottom();
+      var data;
+
+      if (ik.wrapper.state.get('language') === 'en') {
+        data = kiosk;
+      } else {
+        data = kiosk.translated;
+      }
+
+      $('.bottom__active').html(bottomActiveTpl(data));
     }
 
     this.renderExplore = function () {
