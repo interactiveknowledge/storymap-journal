@@ -408,12 +408,19 @@ define([
       }
     }, ik.wrapper.idle.interval);
 
+    // Update menu buttons for story map
     ik.wrapper.topic.subscribe('story-navigate-section', function (e) {
+      var first, last;
+
       if (e === app.data.getStoryLength() - 1) {
-        $('#button-next').attr('class', 'fade');
-      } else {
-        $('#button-next').attr('class', '');
+        last = true;
       }
+
+      if (e === 0) {
+        first = true;
+      }
+
+      ik.wrapper.sections.menu.updateStoryMapButtons(first, last);
     });
 
     /** Initialize the map listening events for LLC since it requires login */
@@ -601,6 +608,19 @@ define([
               ik.wrapper.analytics.event('Story Map', 'Story Map Navigation Next', 'The user has navigated next one section in the story map.');
 
               ik.wrapper.topic.publish('story-navigate-section', index + 1);
+            } else if (index + 1 == length) {
+
+              if (ik.wrapper.getVersion() === 'cdi') {
+                var region = ik.wrapper.state.get('regionid');
+
+                if (region !== undefined && region > 0) {
+                  ik.wrapper.showRegion(region);
+                } else {
+                  ik.wrapper.showNav();
+                }
+              } else {
+                ik.wrapper.showNav();
+              }
             }
           }, 1000));
           break;

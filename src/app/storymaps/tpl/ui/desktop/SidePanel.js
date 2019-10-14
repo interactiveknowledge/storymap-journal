@@ -400,8 +400,8 @@ define(["lib-build/tpl!./SidePanelSection",
               region.targetId = 0;
             } else {
               region.title = '';
-              nav.actionName = 'explore';
-              nav.title = 'Explore our Global Community';
+              nav.actionName = 'nav';
+              nav.title = 'Return to main menu';
               nav.targetId = 0;
             }
           } else {
@@ -412,8 +412,8 @@ define(["lib-build/tpl!./SidePanelSection",
               region.actionName = 'region';
             } else {
               region.title = '';
-              nav.actionName = 'explore';
-              nav.title = 'Explore our Global Community';
+              nav.actionName = 'nav';
+              nav.title = 'Return to main menu';
               nav.targetId = ik.wrapper.layout.state.explore.section.interaction.map;
             }
           }

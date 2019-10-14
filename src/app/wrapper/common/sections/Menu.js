@@ -10,7 +10,9 @@ define([
   'lib-build/tpl!../../tpl/svg/menu-language-en',
   'lib-build/tpl!../../tpl/svg/menu-language-es',
   'lib-build/tpl!../../tpl/svg/hamburger-button',
-  'lib-build/tpl!../../tpl/svg/menu-skip'
+  'lib-build/tpl!../../tpl/svg/menu-skip',
+  'lib-build/tpl!../../tpl/svg/menu-menu',
+  'lib-build/tpl!../../tpl/svg/menu-menu-back'
 ], function (
   menuTplActive,
   menuTplStoryMap,
@@ -23,7 +25,9 @@ define([
   menuTplLanguageEn,
   menuTplLanguageEs,
   menuTplHamburger,
-  menuTplSkip
+  menuTplSkip,
+  menuTplMenu,
+  menuTplMenuBack
 ) {
   return function Menu () {
     console.log('wrapper.common.Menu -- init');
@@ -97,7 +101,7 @@ define([
         fill: ''
       });
 
-      var menuBack = (currentLanguage === 'en') ? menuTplBack({}) : menuTplBackEs({});
+      var menuBack = (currentLanguage === 'en') ? menuTplMenuBack({}) : menuTplMenuBack({});
       var menuNext = (currentLanguage === 'en') ? menuTplNext({}) : menuTplNextEs({});
       var languageEn = menuTplLanguageEn({});
       var languageEs = menuTplLanguageEs({});
@@ -129,8 +133,42 @@ define([
       }));
     }
 
+    /**
+     * Update the story map menu buttons.
+     *
+     * @param {*} first is first section
+     * @param {*} last is last section
+     */
+    var updateStoryMapButtons = function (first = false, last = false) {
+      if (first === true) {
+        var menu = menuTplMenuBack({});
+      } else {
+        if (ik.wrapper.state.get('language') === 'en') {
+          var menu = menuTplBack({});
+        } else {
+          var menu = menuTplBackEs({});
+        }
+      }
+
+      $('button[data-nav=back]').html(menu);
+
+      if (last === true) {
+        var menu = menuTplMenu({});
+        $('button[data-nav=next]').html(menu);
+      } else {
+        if (ik.wrapper.state.get('language') === 'en') {
+          var menu = menuTplNext({});
+        } else {
+          var menu = menuTplNextEs({});
+        }
+
+        $('button[data-nav=next]').html(menu);
+      }
+    }
+
     return {
-      render: render.bind(this)
+      render: render.bind(this),
+      updateStoryMapButtons: updateStoryMapButtons
     }
   }
 });
