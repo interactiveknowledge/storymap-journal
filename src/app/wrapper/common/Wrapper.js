@@ -192,6 +192,24 @@ define([
       })
 
       /**
+       * Use this watcher to help "clean up" sections after navigating away from them.
+       */
+      this.state.watch('prev-wrapper-state', function () {
+        switch (ik.wrapper.state.get('prev-wrapper-state')) {
+          case 'active':
+            ik.wrapper.player.pause();
+            break;
+          case 'nav':
+          case 'region':
+          case 'active':
+          case 'explore':
+          case 'storymap':
+          default:
+            // nothing
+        }
+      })
+
+      /**
        * Section render lifecyle state watcher.
        */
       this.state.watch('rendering', function () {

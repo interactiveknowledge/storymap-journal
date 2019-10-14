@@ -72,6 +72,8 @@ define([
         }, 1500)
       });
 
+      player.setCurrentTime(0);
+
       player.enableTextTrack('en');
 
       player.play();
