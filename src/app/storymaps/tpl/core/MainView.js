@@ -317,7 +317,8 @@ define(["lib-build/css!./MainView",
 						autoResize: false,
 						showAttribution: true,
 						infoWindow: popup,
-						extent: extent
+						extent: extent,
+            logo: false
 					},
 					usePopupManager: true,
 					ignorePopups: false,

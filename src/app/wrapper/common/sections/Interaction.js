@@ -365,7 +365,8 @@ define([
       // var map = esriUtils.createMap(mapid, container[0], {
       //   mapOptions: {
       //     slider: true,
-      //     nav:false
+      //     nav:false,
+      //     logo: false
       //   }
       // }).then(function (response) {
       //   ik.map = response.map;

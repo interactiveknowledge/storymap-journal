@@ -440,7 +440,8 @@ define([
       var map = esriUtils.createMap(ik.wrapper.layout.state.explore.section.interaction.map, container[0], {
         mapOptions: {
           slider: true,
-          nav:false
+          nav:false,
+          logo: false
         }
       }).then(function (response) {
         ik.map = response.map;
