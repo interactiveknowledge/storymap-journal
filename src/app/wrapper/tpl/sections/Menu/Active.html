@@ -1,4 +1,7 @@
 <div class="menu__active__wrapper" style="background-color: <%= color %>;">
+  <div class="menu__active__wrapper__text">
+    <%= title %>
+  </div>
   <div class="menu__active__wrapper__buttons">
     <button class="menu__active__wrapper__buttons__language" data-nav="active-language" data-language="<%= (language === 'en') ? 'es' : 'en' %>">
       <% if (language === 'en') { %>
@@ -8,7 +11,11 @@
       <% } %>
     </button>
     <button data-nav="<%= buttonHamburgerNav %>" data-<%= buttonHamburgerNav %>="<%= buttonHamburgerData %>">
-      <%= buttonHamburger %>
+      <% if (language === 'en') { %>
+        <%= buttonHamburger %>
+      <% } else { %>
+        <%= buttonHamburgerEs %>
+      <% } %>
     </button>
   </div>
 </div>

@@ -9,7 +9,8 @@ define([
   'lib-build/tpl!../../tpl/svg/menu-next-es',
   'lib-build/tpl!../../tpl/svg/menu-language-en',
   'lib-build/tpl!../../tpl/svg/menu-language-es',
-  'lib-build/tpl!../../tpl/svg/hamburger-button'
+  'lib-build/tpl!../../tpl/svg/hamburger-button',
+  'lib-build/tpl!../../tpl/svg/menu-skip'
 ], function (
   menuTplActive,
   menuTplStoryMap,
@@ -21,7 +22,8 @@ define([
   menuTplNextEs,
   menuTplLanguageEn,
   menuTplLanguageEs,
-  menuTplHamburger
+  menuTplHamburger,
+  menuTplSkip
 ) {
   return function Menu () {
     console.log('wrapper.common.Menu -- init');
@@ -50,16 +52,20 @@ define([
       var languageEn = menuTplLanguageEn({});
       var languageEs = menuTplLanguageEs({});
       var hamburger = menuTplHamburger({});
+      var skip = menuTplSkip({});
+      var skipEs = menuTplNextEs({});
 
       $('.menu__active').html(menuTplActive({
         anotherLanguage: alternateLanguage,
-        buttonHamburger: hamburger,
+        buttonHamburger: skip,
+        buttonHamburgerEs: skipEs,
         buttonHamburgerNav: 'nav',
         buttonHamburgerData: 0,
         buttonLanguageEn: languageEn,
         buttonLanguageEs: languageEs,
         color: '#C84107',
-        language: currentLanguage
+        language: currentLanguage,
+        title: 'Masankho Banda'
       }));
     }
 

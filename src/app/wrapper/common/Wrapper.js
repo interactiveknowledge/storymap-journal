@@ -604,8 +604,12 @@ define([
 
             if (language) {
               ik.wrapper.state.set('language', language);
+
+              // Update captions
+              ik.wrapper.player.enableTextTrack(language);
             }
 
+            // Re-render sections
             ik.wrapper.sections.info.render();
             ik.wrapper.sections.menu.render();
 

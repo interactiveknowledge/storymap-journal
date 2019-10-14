@@ -77,14 +77,25 @@
 
   &__active {
     &__wrapper {
-      justify-content: flex-end;
+      justify-content: space-between;
+
+      &__text {
+        font-size: 34px;
+        font-weight: bold;
+      }
 
       button {
         position: relative;
         top: 6px;
 
-        svg .background {
-          fill: $what-is-leaf-secondary;
+        svg {
+          .arrow, .text {
+            fill: #fff;
+          }
+
+          .background {
+            fill: $what-is-leaf-secondary;
+          }
         }
       }
     }

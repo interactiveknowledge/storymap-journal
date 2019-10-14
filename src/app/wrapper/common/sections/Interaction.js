@@ -65,13 +65,18 @@ define([
       var iframe = document.querySelector('iframe');
       var player = new vimeo(iframe);
 
+
       player.on('ended', function () {
         setTimeout(function () {
           ik.wrapper.state.set('wrapper-state', 'nav');
         }, 1500)
       });
 
+      player.enableTextTrack('en');
+
       player.play();
+
+      ik.wrapper.player = player;
     }
 
     this.renderAttract = function () {
