@@ -277,18 +277,6 @@ const createLayout = (body) => {
   // Region section
   region.section.info.logo = setFile(cmsContent.field_logo.image.uri.url)
 
-  if (filepath = _.get(cmsContent, 'field_state_region_bg_video.field_media_video_file.uri.url', false)) {
-    region.background.video = {
-      src: setFile(cmsContent.field_state_region_bg_video.field_media_video_file.uri.url),
-      type: _.get(cmsContent, 'field_state_region_bg_video.field_media_video_file.filemime', '')
-    }
-
-    // Check for MOV files
-    if (region.background.video.type === 'video/quicktime')
-      region.background.video.type = 'video/mp4'
-  }
-
-
   // Story map section
   storymap.section.info.h1 = getHeader(cmsContent, 'field_state_storymap_title')
 
@@ -393,6 +381,11 @@ const createRegions = (body, featuredRegion) => {
     try {
       background_video = setFile(region.field_nav_region_video.field_media_video_file.uri.url)
       background_video_type = region.field_nav_region_video.field_media_video_file.filemime
+
+          // Check for MOV files
+    if (background_video_type === 'video/quicktime')
+      background_video_type = 'video/mp4'
+
     } catch (e) {
       background_video = null
     }
@@ -495,9 +488,7 @@ module.exports = async (event, logger) => {
         'field_state_nav_bg_video',
         'field_state_nav_bg_video.field_media_video_file',
         'field_state_region_bg_img',
-        'field_state_region_bg_img.image',
-        'field_state_region_bg_video',
-        'field_state_region_bg_video.field_media_video_file'
+        'field_state_region_bg_img.image'
       ].join(','))
   }
 
