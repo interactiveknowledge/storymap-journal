@@ -40,10 +40,29 @@ define([], function () {
       })
     }
 
+    var getRegionBackgroundVideo = function(regionid) {
+      var currentRegion = ik.wrapper.regions.filter(function (region) {
+        return region.id == regionid;
+      });
+
+      return currentRegion[0].media.background_video;
+    }
+
+    var getRegionBackgroundVideoType = function(regionid) {
+      var currentRegion = ik.wrapper.regions.filter(function (region) {
+        return region.id == regionid;
+      });
+
+      return currentRegion[0].media.background_video_type;
+    }
+
+
     return {
       get: get,
       getAll: getAll,
-      getFeaturedRegion: getFeaturedRegion
+      getFeaturedRegion: getFeaturedRegion,
+      getRegionBackgroundVideo: getRegionBackgroundVideo,
+      getRegionBackgroundVideoType: getRegionBackgroundVideoType
     }
   }
 });

@@ -387,6 +387,16 @@ const createRegions = (body, featuredRegion) => {
   writeJsonToFile(downloadPath + '/regions.json', cmsContent)
 
   const regions = cmsContent.map((region, index) => {
+    let background_video = null
+    let background_video_type = null
+
+    try {
+      background_video = setFile(region.field_nav_region_video.field_media_video_file.uri.url)
+      background_video_type = region.field_nav_region_video.field_media_video_file.filemime
+    } catch (e) {
+      background_video = null
+    }
+
     return {
       ...regionTemplate,
       ...{ id: region.drupal_internal__tid },
@@ -399,6 +409,10 @@ const createRegions = (body, featuredRegion) => {
             primary: region.field_primary.color,
             secondary: region.field_secondary.color
           }
+        }},
+        ...{ media: {
+          background_video: background_video,
+          background_video_type: background_video_type
         }}
       }
   })
@@ -511,7 +525,7 @@ module.exports = async (event, logger) => {
 
   if (KIOSK_VERSION === 'cdi') {
     // Get Regions for Cultural Dive Ins
-    taxonomy = new URL('/jsonapi/taxonomy_term/cdi_region?sort=weight', BACKEND_URL)
+    taxonomy = new URL('/jsonapi/taxonomy_term/cdi_region?sort=weight&include=field_nav_region_video,field_nav_region_video.field_media_video_file', BACKEND_URL)
 
     try {
       // Grab the regions
