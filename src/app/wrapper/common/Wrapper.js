@@ -409,7 +409,7 @@ define([
 
         // Analytics
         ik.wrapper.analytics.event('Idle Timeout', 'The kiosk has been idle for more than ' + ik.wrapper.idle.reset + ' seconds. Resetting.');
-        ik.wrapper.analytics.event('Kiosk', 'The kiosk window is reloading.');
+        ik.wrapper.analytics.event('Kiosk', 'The kiosk window is reloading', 'Idle timeout reset');
 
         if (getUrlVar('username') && getUrlVar('password')) {
           var username = getUrlVar('username');
@@ -478,7 +478,7 @@ define([
       }
 
       // Analytics
-      ik.wrapper.analytics.event('Kiosk', 'The kiosk has reloaded and is navigating directory to a story map.');
+      ik.wrapper.analytics.event('Kiosk', 'The kiosk has reloaded and is navigating directly to a story map.');
 
       ik.wrapper.showStorymap(getUrlVar('id'), 1);
     }
@@ -550,7 +550,7 @@ define([
 
       if (pageReload === 0 && ik.wrapper.storymapCount > 14 && window.ipcRenderer) {
         // Analytics
-        ik.wrapper.analytics.event('Kiosk', 'The kiosk window is reloading.', 'Story Map count is ' + ik.wrapper.storymapCount);
+        ik.wrapper.analytics.event('Kiosk', 'The kiosk window is reloading', 'Story Map count is ' + ik.wrapper.storymapCount);
 
         var regionid = ik.wrapper.state.get('regionid')
         var version = ik.wrapper.getVersion();
