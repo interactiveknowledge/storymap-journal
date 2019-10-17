@@ -200,6 +200,8 @@ define([
             ik.wrapper.player.getEnded().then(function(ended) {
               if (ended === false) {
                 ik.wrapper.analytics.event('Menu Navigation', 'Why LEAF Matters Video skipped');
+              } else {
+                ik.wrapper.analytics.event('Menu Navigation', 'Why LEAF Matters Video watched and finished');
               }
             }, function(error) {});
             ik.wrapper.player.pause();
