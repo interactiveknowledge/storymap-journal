@@ -52,10 +52,10 @@ define([
 
       if (currentLanguage === 'en') {
         renderData.h1 = 'Why LEAF Matters';
-        renderData.desc = 'This is my description text';
+        renderData.desc = '';
       } else {
         renderData.h1 = 'Por qué LEAF es importante';
-        renderData.desc = 'This is my description text';
+        renderData.desc = '';
       }
 
       $('.info__active').html(infoActiveTpl(renderData));
