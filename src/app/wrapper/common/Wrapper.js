@@ -197,6 +197,11 @@ define([
       this.state.watch('prev-wrapper-state', function () {
         switch (ik.wrapper.state.get('prev-wrapper-state')) {
           case 'active':
+            ik.wrapper.player.getEnded().then(function(ended) {
+              if (ended === false) {
+                ik.wrapper.analytics.event('Menu Navigation', 'Why LEAF Matters Video skipped');
+              }
+            }, function(error) {});
             ik.wrapper.player.pause();
             break;
           case 'storymap':
@@ -360,7 +365,7 @@ define([
     var resetIdleTimer = function () {
       // Analytics
       if (ik.wrapper.idle.current > ik.wrapper.idle.warning && ik.wrapper.idle.current < ik.wrapper.idle.reset) {
-        ik.wrapper.analytics.event('Kiosk', 'Idle Timeout Canceled', 'User has cancelled the idle timer.');
+        ik.wrapper.analytics.event('Idle Timeout', 'User has canceled the idle timer.');
       }
 
       ik.wrapper.idle.current = 0;
@@ -396,17 +401,21 @@ define([
       }
 
       if (ik.wrapper.idle.current > ik.wrapper.idle.reset) {
-          ik.wrapper.idle.current = 0;
-          $('#idle-modal').hide();
-          var version = ik.wrapper.getVersion();
+        ik.wrapper.idle.current = 0;
+        $('#idle-modal').hide();
+        var version = ik.wrapper.getVersion();
 
-          if (getUrlVar('username') && getUrlVar('password')) {
-            var username = getUrlVar('username');
-            var password = getUrlVar('password');
-            window.location.href = `http://localhost:3000/?version=${version}&username=${username}&password=${password}`;
-          } else {
-            window.location.href = `http://localhost:3000/?version=${version}`;
-          }
+        // Analytics
+        ik.wrapper.analytics.event('Idle Timeout', 'The kiosk has been idle for more than ' + ik.wrapper.idle.reset + ' seconds. Resetting.');
+        ik.wrapper.analytics.event('Kiosk', 'The kiosk window is reloading.');
+
+        if (getUrlVar('username') && getUrlVar('password')) {
+          var username = getUrlVar('username');
+          var password = getUrlVar('password');
+          window.location.href = `http://localhost:3000/?version=${version}&username=${username}&password=${password}`;
+        } else {
+          window.location.href = `http://localhost:3000/?version=${version}`;
+        }
       }
     }, ik.wrapper.idle.interval);
 
@@ -466,6 +475,9 @@ define([
         ik.wrapper.state.set('language', getUrlVar('lang'));
       }
 
+      // Analytics
+      ik.wrapper.analytics.event('Kiosk', 'The kiosk has reloaded and is navigating directory to a story map.');
+
       ik.wrapper.showStorymap(getUrlVar('id'), 1);
     }
   } // End init()
@@ -474,7 +486,7 @@ define([
      * Public methods, avail globally, which set the wrapper state.
      */
     this.showActive = function () {
-      ik.wrapper.analytics.pageView('/active', 'Active Screen');
+      ik.wrapper.analytics.pageView('/active', 'Why LEAF Matters? Into Video Screen');
 
       ik.wrapper.state.set('prev-wrapper-state', ik.wrapper.state.get('wrapper-state'));
       ik.wrapper.state.set('wrapper-state', 'active');
@@ -488,8 +500,7 @@ define([
     }
 
     this.showExplore = function (mapid) {
-      console.log(mapid);
-      ik.wrapper.analytics.pageView('/explore', 'Explore Screen');
+      ik.wrapper.analytics.pageView('/explore', 'Explore Global Community Screen');
 
       ik.wrapper.state.set('prev-wrapper-state', ik.wrapper.state.get('wrapper-state'));
 
@@ -513,7 +524,9 @@ define([
 
       var currentState = ik.wrapper.state.get('wrapper-state');
       if (currentState === 'nav') {
-        ik.wrapper.analytics.event('Kiosk', 'Main Menu Region Selected', 'The user has selected a region from the main menu of the CDI.');
+        var region = ik.wrapper.api.region.get(regionid);
+        var regionName = region[0].name;
+        ik.wrapper.analytics.event('Menu Navigation', 'Region Selected', 'The user has selected region' + regionName + ' from the main menu of the CDI.');
       }
 
       ik.wrapper.state.set('prev-wrapper-state', currentState);
@@ -525,24 +538,32 @@ define([
     }
 
     this.showStorymap = function (appid, pageReload = 0) {
-      // Analytics
-      ik.wrapper.analytics.pageView('/storymap', 'Story Map');
+      var sm = ik.wrapper.api.storymap.get(appid);
+      var smTitle = sm[0].name;
+
       if (ik.wrapper.getVersion() === 'cdi') {
         var featuredRegion = ik.wrapper.api.region.getFeaturedRegion();
         var currentRegion = ik.wrapper.state.get('regionid');
-
-        if (parseInt(featuredRegion) !== parseInt(currentRegion)) {
-          ik.wrapper.analytics.event('Kiosk', 'Non-featured Region Story Map', 'This story map is from a region which was not featured by the kiosk.');
-        }
       }
 
-
       if (pageReload === 0 && ik.wrapper.storymapCount > 14 && window.ipcRenderer) {
+        // Analytics
+        ik.wrapper.analytics.event('Kiosk', 'The kiosk window is reloading.', 'Story Map count is ' + ik.wrapper.storymapCount);
+
         var regionid = ik.wrapper.state.get('regionid')
         var version = ik.wrapper.getVersion();
         var lang = ik.wrapper.state.get('language');
         ipcRenderer.send('navigate-new-window', `http://localhost:3000/?version=${version}&state=storymap&region=${regionid}&id=${appid}&lang=${lang}`);
       } else {
+        // Analytics
+        ik.wrapper.analytics.pageView('/storymap', 'Story Map');  
+        ik.wrapper.analytics.event('Menu Navigation', 'Story Map Selected', 'The "' + smTitle + '" Story Map has been selected.');
+        ik.wrapper.analytics.event('Story Map', 'Story Map Selected', 'The "' + smTitle + '" Story Map has been selected.');
+
+        if (parseInt(featuredRegion) !== parseInt(currentRegion)) {
+          ik.wrapper.analytics.event('Menu Navigation', 'Non-featured Region Story Map Selected', 'This story map is from a region which was not featured by the kiosk.');
+        }
+
         ik.wrapper.state.set('prev-wrapper-state', ik.wrapper.state.get('wrapper-state'));
         if (ik.wrapper.state.get('appid') !== appid) {
           ik.wrapper.state.set('appid', appid);
@@ -586,13 +607,13 @@ define([
                 ik.wrapper.showRegion(region);
               } else {
                 // Analytics
-                ik.wrapper.analytics.event('Kiosk', 'Kiosk Navigation', 'View All Regions');
+                ik.wrapper.analytics.event('Menu Navigation', 'View All Regions');
 
                 ik.wrapper.showNav();
               }
             } else {
               // Analytics
-              ik.wrapper.analytics.event('Story Map', 'Story Map Navigation Back', 'The user has navigated back one section in the story map.');
+              ik.wrapper.analytics.event('Story Map', 'Previous Section', 'The user has navigated back one section in the story map.');
               ik.wrapper.topic.publish('story-navigate-section', index - 1);
             }
           }, 1000));
@@ -607,7 +628,7 @@ define([
 
             if (index + 1 < length) {
               // Analytics
-              ik.wrapper.analytics.event('Story Map', 'Story Map Navigation Next', 'The user has navigated next one section in the story map.');
+              ik.wrapper.analytics.event('Story Map', 'Next Section', 'The user has navigated next one section in the story map.');
 
               ik.wrapper.topic.publish('story-navigate-section', index + 1);
             } else if (index + 1 == length) {
@@ -650,6 +671,10 @@ define([
               ik.wrapper.player.enableTextTrack(language);
             }
 
+            // Analytics
+            var languageHuman = language === 'en' ? 'English' : 'Spanish';
+            ik.wrapper.analytics.event('Language', 'Language Switched', 'Kiosk content language switched to ' + languageHuman);
+
             // Re-render sections
             ik.wrapper.sections.info.render();
             ik.wrapper.sections.menu.render();
@@ -671,6 +696,11 @@ define([
             e.preventDefault();
 
             if (language) {
+              // Analytics
+              var languageHuman = language === 'en' ? 'English' : 'Spanish';
+              ik.wrapper.analytics.event('Language', 'Language Switched', 'Kiosk content language switched to ' + languageHuman);
+              ik.wrapper.analytics.event('Story Map', 'Language Switched', 'Kiosk content language switched to ' + languageHuman);
+
               ik.wrapper.state.set('language', language);
             }
 

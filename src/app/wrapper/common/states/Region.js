@@ -53,7 +53,7 @@ define([
         }
 
         // analytics
-        ik.wrapper.analytics.event('Kiosk', 'Menu Navigation', 'More Countries Next');
+        ik.wrapper.analytics.event('Menu Navigation', 'More Countries Next', '');
 
         transformFrame(currentIndex);
       }
@@ -71,7 +71,7 @@ define([
           btnPrev.setAttribute('disabled', true);
         }
 
-        ik.wrapper.analytics.event('Kiosk', 'Menu Navigation', 'More Countries Previous');
+        ik.wrapper.analytics.event('Menu Navigation', 'More Countries Previous');
 
         transformFrame(currentIndex);
       }
