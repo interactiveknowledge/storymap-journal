@@ -413,8 +413,8 @@ define(["lib-build/tpl!./SidePanelSection",
               if (ik.wrapper.state.get('language') === 'en') {
                 region.title = 'Explore more of ' + regionInfo[0].name;
               } else {
-                region.title = 'Explore more of ' + regionInfo[0].translated + '(spanish translation)';
-                nav.title = 'Explore another region (spanish translation)';
+                region.title = 'Explora más de ' + regionInfo[0].translated;
+                nav.title = 'Explora otra zona';
               }
             } else {
               region.title = '';
