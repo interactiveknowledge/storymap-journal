@@ -408,13 +408,23 @@ define(["lib-build/tpl!./SidePanelSection",
             if (ik.wrapper.state.get('version') === 'cdi') {
               region.targetId = ik.wrapper.state.get('regionid');
               regionInfo = ik.wrapper.api.region.get(region.targetId);
-              region.title = regionInfo[0].name;
               region.actionName = 'region';
+
+              if (ik.wrapper.state.get('language') === 'en') {
+                region.title = 'Explore more of ' + regionInfo[0].name;
+              } else {
+                region.title = 'Explore more of ' + regionInfo[0].translated + '(spanish translation)';
+                nav.title = 'Explore another region (spanish translation)';
+              }
             } else {
               region.title = '';
               nav.actionName = 'nav';
-              nav.title = 'Return to main menu';
               nav.targetId = ik.wrapper.layout.state.explore.section.interaction.map;
+              if (ik.wrapper.state.get('language') === 'en') {
+                nav.title = 'Return to main menu';
+              } else {
+                nav.title = 'Return to main menu (spanish translation)';
+              }
             }
           }
         }
