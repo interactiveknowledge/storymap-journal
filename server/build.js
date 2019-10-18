@@ -490,9 +490,7 @@ module.exports = async (event, logger) => {
         'field_state_nav_bg_img',
         'field_state_nav_bg_img.image',
         'field_state_nav_bg_video',
-        'field_state_nav_bg_video.field_media_video_file',
-        'field_state_region_bg_img',
-        'field_state_region_bg_img.image'
+        'field_state_nav_bg_video.field_media_video_file'
       ].join(','))
   }
 
