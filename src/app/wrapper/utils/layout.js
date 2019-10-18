@@ -79,8 +79,10 @@ define([], function () {
       }
 
       video.show();
-    } else if (ik.wrapper.layout.state[this.getState()].background.img.length > 0) {
-      ik.wrapper.state.set('video', 'stopped');
+    } else if (ik.wrapper.layout.state[this.getState()].background.img.length) {
+      if (ik.wrapper.state) {
+        ik.wrapper.state.set('video', 'stopped');
+      }
 
       var img = ik.wrapper.layout.state[this.getState()].background.img;
 
