@@ -12,7 +12,9 @@ define([
   'lib-build/tpl!../../tpl/svg/hamburger-button',
   'lib-build/tpl!../../tpl/svg/menu-skip',
   'lib-build/tpl!../../tpl/svg/menu-menu',
-  'lib-build/tpl!../../tpl/svg/menu-menu-back'
+  'lib-build/tpl!../../tpl/svg/menu-menu-back',
+  'lib-build/tpl!../../tpl/svg/menu-menu-es',
+  'lib-build/tpl!../../tpl/svg/menu-menu-back-es'
 ], function (
   menuTplActive,
   menuTplStoryMap,
@@ -27,7 +29,9 @@ define([
   menuTplHamburger,
   menuTplSkip,
   menuTplMenu,
-  menuTplMenuBack
+  menuTplMenuBack,
+  menuTplMenuEs,
+  menuTplMenuBackEs
 ) {
   return function Menu () {
     console.log('wrapper.common.Menu -- init');
@@ -101,7 +105,7 @@ define([
         fill: ''
       });
 
-      var menuBack = (currentLanguage === 'en') ? menuTplMenuBack({}) : menuTplMenuBack({});
+      var menuBack = (currentLanguage === 'en') ? menuTplMenuBack({}) : menuTplMenuBackEs({});
       var menuNext = (currentLanguage === 'en') ? menuTplNext({}) : menuTplNextEs({});
       var languageEn = menuTplLanguageEn({});
       var languageEs = menuTplLanguageEs({});
@@ -153,7 +157,11 @@ define([
       $('button[data-nav=back]').html(menu);
 
       if (last === true) {
-        var menu = menuTplMenu({});
+        if (ik.wrapper.state.set('language') === 'en') {
+          var menu = menuTplMenu({});
+        } else {
+          var menu = menuTplMenuEs({});
+        }
         $('button[data-nav=next]').html(menu);
       } else {
         if (ik.wrapper.state.get('language') === 'en') {
