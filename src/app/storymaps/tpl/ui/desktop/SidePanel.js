@@ -423,7 +423,7 @@ define(["lib-build/tpl!./SidePanelSection",
               if (ik.wrapper.state.get('language') === 'en') {
                 nav.title = 'Return to main menu';
               } else {
-                nav.title = 'Return to main menu (spanish translation)';
+                nav.title = 'Vuelva al menú principal';
               }
             }
           }
