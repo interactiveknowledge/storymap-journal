@@ -232,6 +232,10 @@ const createLayout = (body) => {
     if (filepath = _.get(cmsContent, 'field_state_active_bg_img.image.uri.url', defaultAttractBgImg))
       active.background.img = setFile(filepath)
 
+    // Check for cropped version
+    let imageName = path.basename(filepath)
+    active.background.img = setFile('/sites/default/files/styles/story_map_header_image/public/' + imageName)
+
     active.section.bottom.title = cmsContent.field_callout.field_heading
     active.section.bottom.body = cmsContent.field_callout.body.value
     active.section.bottom.translated.title = cmsContent.field_translated_callout.field_heading
