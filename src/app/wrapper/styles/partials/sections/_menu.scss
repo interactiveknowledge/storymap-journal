@@ -66,6 +66,21 @@
       }
     }
   }
+
+  &__storymap {
+    &__wrapper {
+      flex-wrap: wrap;
+
+      &__title, &__buttons {
+        flex-basis: 100%;
+        width: 100%;
+      }
+
+      &__buttons {
+        justify-content: flex-end;
+      }
+    }
+  }
 }
 
 .menu {
