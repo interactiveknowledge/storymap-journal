@@ -68,7 +68,7 @@ define([
 
       player.on('ended', function () {
         setTimeout(function () {
-          ik.wrapper.state.set('wrapper-state', 'nav');
+          ik.wrapper.showNav();
         }, 1500)
       });
 
