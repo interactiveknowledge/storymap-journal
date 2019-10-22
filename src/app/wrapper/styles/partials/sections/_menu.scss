@@ -95,7 +95,7 @@
       justify-content: space-between;
 
       &__text {
-        font-size: 34px;
+        @include font(60, 58, 'Hallo Sans');
         font-weight: bold;
       }
 
