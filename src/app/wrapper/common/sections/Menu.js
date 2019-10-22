@@ -157,7 +157,7 @@ define([
       $('button[data-nav=back]').html(menu);
 
       if (last === true) {
-        if (ik.wrapper.state.set('language') === 'en') {
+        if (ik.wrapper.state.get('language') === 'en') {
           var menu = menuTplMenu({});
         } else {
           var menu = menuTplMenuEs({});
