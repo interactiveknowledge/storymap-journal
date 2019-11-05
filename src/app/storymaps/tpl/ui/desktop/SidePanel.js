@@ -390,7 +390,7 @@ define(["lib-build/tpl!./SidePanelSection",
         };
 
         if (nextTitle.length === 0) {
-          nav.title = 'Explore another region';
+          nav.title = 'Explore Another Region';
           nav.actionName = 'nav';
           buttonTitle = '';
 
@@ -401,7 +401,7 @@ define(["lib-build/tpl!./SidePanelSection",
             } else {
               region.title = '';
               nav.actionName = 'nav';
-              nav.title = 'Return to main menu';
+              nav.title = 'Return to Main Menu';
               nav.targetId = 0;
             }
           } else {
@@ -411,7 +411,7 @@ define(["lib-build/tpl!./SidePanelSection",
               region.actionName = 'region';
 
               if (ik.wrapper.state.get('language') === 'en') {
-                region.title = 'Explore more of ' + regionInfo[0].name;
+                region.title = 'Explore More of ' + regionInfo[0].name;
               } else {
                 region.title = 'Explora más de ' + regionInfo[0].translated;
                 nav.title = 'Explora otra zona';
@@ -421,7 +421,7 @@ define(["lib-build/tpl!./SidePanelSection",
               nav.actionName = 'nav';
               nav.targetId = ik.wrapper.layout.state.explore.section.interaction.map;
               if (ik.wrapper.state.get('language') === 'en') {
-                nav.title = 'Return to main menu';
+                nav.title = 'Return to Main Menu';
               } else {
                 nav.title = 'Vuelva al menú principal';
               }

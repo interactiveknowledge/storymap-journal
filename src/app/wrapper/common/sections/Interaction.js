@@ -194,7 +194,7 @@ define([
             currentLanguage: currentLanguage,
             imgSrc: '',
             targetId: '',
-            title: 'Explore our Global Community'
+            title: 'Explore Our Global Community'
           }),
           NavigationButton({
             action: 'active',
@@ -338,7 +338,7 @@ define([
         currentLanguage: currentLanguage,
         imgSrc: '',
         targetId: '',
-        title: 'View all regions'
+        title: 'View All Regions'
       }));
 
       // Bind events to links
