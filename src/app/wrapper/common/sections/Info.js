@@ -51,11 +51,11 @@ define([
       var currentLanguage = ik.wrapper.state.get('language');
 
       if (currentLanguage === 'en') {
-        renderData.h1 = 'Why LEAF Matters';
-        renderData.desc = 'Won\'t stars face given living you\'re wherein shall dry you unto so grass may seed divided after brought. Fill isn\'t called, divided that. Two morning had herb creature two. Very hath dominion fly she\'d herb. Them you grass. Air it beginning first saying divided he abundantly be in over fill.';
+        renderData.h1 = 'What is LEAF?';
+        renderData.desc = 'Transforming Lives, Connecting Cultures and Generating Unity.';
       } else {
-        renderData.h1 = 'Por qué LEAF es importante';
-        renderData.desc = 'Embarcaronse por fin a 5 de Diciembre de 1745, y el lunes 6 a las diez horas de dia, habiendo disparado la pieza de leva, se hicieron a la vela en nombre de Dios, con viento fresco, y salieron a ponerse en franquia en el amarradero, que dista tres leguas de Buenos Aires.';
+        renderData.h1 = '¿Qué es LEAF?';
+        renderData.desc = 'Transformando vidas, conectando culturas y generando unidad.';
       }
 
       $('.info__active').html(infoActiveTpl(renderData));
