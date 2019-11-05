@@ -65,12 +65,14 @@ define([
       var iframe = document.querySelector('iframe');
       var player = new vimeo(iframe);
 
-
-      player.on('ended', function () {
-        setTimeout(function () {
-          ik.wrapper.showNav();
-        }, 1500)
-      });
+      player.on('timeupdate', function(event) {
+        if (event.percent > .995) {
+          ik.wrapper.player.pause();
+          setTimeout(function () {
+            ik.wrapper.showNav();
+          }, 1500)
+        }
+      })
 
       player.setCurrentTime(0);
 
