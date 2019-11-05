@@ -87,7 +87,7 @@ define(["lib-build/tpl!./ViewText",
 				// Set RTE style
 				var editable = CKEDITOR.instances.addEditRTE.editable();
 				editable.setStyle("background-color", _appColors.panel);
-				editable.setStyle("color", _appColors.text);
+				// editable.setStyle("color", _appColors.text);
 				var editableHead = $(editable.$).siblings('head');
 				editableHead.find('#link-style, #caption-style').remove();
 				if (_appColors.textLink) {
