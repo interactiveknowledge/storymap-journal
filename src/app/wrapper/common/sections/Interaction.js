@@ -111,8 +111,8 @@ define([
         navObj.en = 'Please Select:';
         navObj.es = 'Por favor seleccione:';
       } else {
-        navObj.en = 'Explore Our Areas of Focus';
-        navObj.es = 'Explorar nuestras áreas de foque';
+        navObj.en = 'Explore Our Areas of Focus:';
+        navObj.es = 'Explorar nuestras áreas de foque:';
       }
 
       $(activeClass).html(interactionNavTpl(navObj));
