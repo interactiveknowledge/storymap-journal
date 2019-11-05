@@ -63,6 +63,12 @@ define([
       var skip = menuTplSkip({});
       var skipEs = menuTplNextEs({});
 
+      var title = 'Why LEAF Matters';
+
+      if (currentLanguage === 'es') {
+        title = 'Por qué es importante LEAF';
+      }
+
       $('.menu__active').html(menuTplActive({
         anotherLanguage: alternateLanguage,
         buttonHamburger: skip,
@@ -73,7 +79,7 @@ define([
         buttonLanguageEs: languageEs,
         color: '#C84107',
         language: currentLanguage,
-        title: 'Masankho Banda'
+        title: title
       }));
     }
 
