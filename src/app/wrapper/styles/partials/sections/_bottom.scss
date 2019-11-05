@@ -50,6 +50,10 @@
   }
 }
 
+.bottom__active__callout__text h3 {
+  color: $what-is-leaf-secondary;
+}
+
 .cdi-africa {
   @include bottomCalloutHeadingColor($region-1-secondary);
 }
