@@ -40,6 +40,14 @@
   src: url('/static/fonts/OpenSans/OpenSans-Regular.ttf') format('truetype');
 }
 
+// Open Sans - Regular Italic - 400
+@font-face {
+    font-family: 'OpenSans';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/static/fonts/OpenSans/OpenSans-Italic.ttf') format('truetype');
+}
+
 // Open Sans - Semibold - 600
 @font-face {
   font-family: 'OpenSans';
