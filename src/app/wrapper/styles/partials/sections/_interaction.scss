@@ -28,7 +28,8 @@
   }
 
   p {
-    @include font(30, 41, 'OpenSans');
+    font-size: 30px;
+    line-height: 41px;
     font-style: italic;
     font-weight: 500;
     padding-bottom: 35px;
@@ -64,9 +65,10 @@
   }
 
   p {
-    @include font(24, 46, 'OpenSans');
+    font-size: 24px;
     font-style: italic;
     font-weight: 500;
+    line-height: 46px;
   }
 }
 
