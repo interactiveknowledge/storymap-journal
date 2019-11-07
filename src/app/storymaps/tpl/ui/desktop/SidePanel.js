@@ -669,7 +669,7 @@ define(["lib-build/tpl!./SidePanelSection",
 				container.find('.scroll').css({
 					'background': 'linear-gradient(' + transparentPanel + ', ' + colors.panel + ')'
 				});
-				container.find('.sections').css("color", colors.text);
+				// container.find('.sections').css("color", colors.text);
 				container.find('.panelEditBtn').css("background-color", colors.panel);
 
 				container.find('.appTitle').css("color", colors.text);
