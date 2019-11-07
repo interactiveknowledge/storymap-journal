@@ -348,6 +348,25 @@ define([
     // Mute, pause, reload buttons
     // initVideoToggleButtons();
 
+    var initMuteTouch = function () {
+      var frame = document.querySelector('.video-controls');
+
+      var frame = $('.video-controls');
+      frame.css({height: '350px', width: '350px'});
+
+      var hammerFrame = new Hammer(frame.get(0)); // HammerFrame for watching touch events
+
+      hammerFrame.on('doubletap', function (e) {
+        if (ik.wrapper.state && ik.wrapper.state.get('video') !== 'muted') {
+          ik.wrapper.state.set('video', 'muted');
+        } else {
+          ik.wrapper.state.set('video', 'unmuted');
+        }
+      });
+    }
+
+    initMuteTouch();
+
     /**
      * Watch state change of wrapper language
      */
