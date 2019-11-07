@@ -60,7 +60,7 @@ body {
 	background-color:#E5E5E5;
 	color:#333;
 	overflow:hidden;
-	font-family: 'open_sansregular', sans-serif;
+	font-family: 'OpenSans', 'open_sansregular', 'Arial', sans-serif;
 }
 
 body.mobile-view {
