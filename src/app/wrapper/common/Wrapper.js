@@ -349,10 +349,8 @@ define([
     // initVideoToggleButtons();
 
     var initMuteTouch = function () {
-      var frame = document.querySelector('.video-controls');
-
       var frame = $('.video-controls');
-      frame.css({height: '350px', width: '350px'});
+      frame.css({height: '175px', width: '175px'});
 
       var hammerFrame = new Hammer(frame.get(0)); // HammerFrame for watching touch events
 
@@ -366,6 +364,19 @@ define([
     }
 
     initMuteTouch();
+
+    var initReloadToch = function () {
+      var frame = $('.reload-controls');
+      frame.css({height: '175px', width: '175px'});
+
+      var hammerFrame = new Hammer(frame.get(0)); // HammerFrame for watching touch events
+
+      hammerFrame.on('doubletap', function (e) {
+        window.location.reload();
+      });
+    }
+
+    initReloadToch();
 
     /**
      * Watch state change of wrapper language
