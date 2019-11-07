@@ -344,7 +344,9 @@ define([
         window.location.reload();
       });
     }
-    initVideoToggleButtons();
+
+    // Mute, pause, reload buttons
+    // initVideoToggleButtons();
 
     /**
      * Watch state change of wrapper language
