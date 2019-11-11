@@ -52,10 +52,10 @@ define([
 
       if (currentLanguage === 'en') {
         renderData.h1 = 'What is LEAF?';
-        renderData.desc = 'Transforming Lives, Connecting Cultures and Generating Unity.';
+        renderData.desc = 'LEAF Community Arts is a non-profit organization, building community, connecting cultures, and enriching lives through the arts - locally & globally - with festivals, community events, & arts education programs.';
       } else {
         renderData.h1 = '¿Qué es LEAF?';
-        renderData.desc = 'Transformando vidas, conectando culturas y generando unidad.';
+        renderData.desc = 'LEAF Community Arts is a non-profit organization, building community, connecting cultures, and enriching lives through the arts - locally & globally - with festivals, community events, & arts education programs.';
       }
 
       $('.info__active').html(infoActiveTpl(renderData));
