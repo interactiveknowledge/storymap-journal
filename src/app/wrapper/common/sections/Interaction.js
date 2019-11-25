@@ -357,22 +357,16 @@ define([
     }
 
     this.renderExplore = function () {
-      var mapid = ik.wrapper.state.get('mapid');
-      var popup = null;
-      var container = $('#explore-map');
+      var activeClass = '.interaction__explore';
 
-      // container.html('');
+      ik.map.centerAndZoom([-27.5,5], 2);
 
-      // console.log(mapid, container[0]);
-      // var map = esriUtils.createMap(mapid, container[0], {
-      //   mapOptions: {
-      //     slider: true,
-      //     nav:false,
-      //     logo: false
-      //   }
-      // }).then(function (response) {
-      //   ik.map = response.map;
-      // });
+      $(activeClass).get(0).insertAdjacentHTML('beforeend', '<span id="explore-map_home" data-nav="nav"><svg xmlns="http://www.w3.org/2000/svg" width="24.823" height="19.98" viewBox="0 0 24.823 19.98"><defs><style>.a{fill:#4c4c4c;}</style></defs><g transform="translate(-0.412 -0.412)"><path class="a" d="M20.587,19.98H15.138a.909.909,0,0,1-.908-.908V13.926H10.6v5.146a.909.909,0,0,1-.909.908H4.24a.909.909,0,0,1-.908-.908V10.3L5.148,8.865v9.3H8.781V13.018a.909.909,0,0,1,.908-.908h5.449a.909.909,0,0,1,.908.908v5.146h3.633v-9.3L21.5,10.3v8.769A.909.909,0,0,1,20.587,19.98ZM.86,10.92a.866.866,0,0,1-.707-.333,1.028,1.028,0,0,1,.2-1.315l4.19-3.311V.908A.909.909,0,0,1,5.451,0H7.873a.909.909,0,0,1,.908.908V2.621L11.856.19A.931.931,0,0,1,12.4,0h.014a1.067,1.067,0,0,1,.558.19l11.5,9.082a1.091,1.091,0,0,1,.2,1.315.909.909,0,0,1-.718.33.894.894,0,0,1-.6-.216L12.414,2.063,1.468,10.7A.91.91,0,0,1,.86,10.92Zm5.5-9.1V4.532l.606-.483V1.817Z" transform="translate(0.412 0.412)"/></g></svg></span>');
+
+        // Bind events to links
+      $(activeClass + ' [data-nav]').each(function(i, ele) {
+        ik.wrapper.createLinks($(ele));
+      });
     }
 
     return {
