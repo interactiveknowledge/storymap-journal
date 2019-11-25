@@ -138,6 +138,8 @@ define([
 
       this.state.set('navigation-history', []);
 
+      this.state.set('video-mute', 0);
+
       /**
        * appid watcher.
        * Kick off necessary methods here if the storymap has changed but wrapper-state has not.
@@ -288,7 +290,7 @@ define([
 
       switch (ik.wrapper.state.get('video')) {
         case 'playing':
-          if (bgVideo.muted) {
+          if (bgVideo.muted && ik.wrapper.state.get('video-mute') === 0) {
             bgVideo.muted = false;
           }
 
@@ -300,6 +302,7 @@ define([
           bgVideo.pause();
           break;
         case 'muted':
+          // deprecated in favor of state 'video-mute' now.
           if (!bgVideo.muted) {
             bgVideo.muted = true;
           }
@@ -308,6 +311,22 @@ define([
           if (bgVideo.muted) {
             bgVideo.muted = false;
           }
+          break;
+        default:
+          break;
+      }
+    })
+
+    // This should control if the bg video has any sound at any time
+    this.state.watch('video-mute', function () {
+      var bgVideo = $('.fullscreen-bg video').get(0);
+
+      switch (ik.wrapper.state.get('video-mute')) {
+        case 0:
+          bgVideo.muted = false;
+          break;
+        case 1:
+          bgVideo.muted = true;
           break;
         default:
           break;
@@ -323,11 +342,11 @@ define([
       var reload = document.getElementById('reload');
 
       muteToggle.addEventListener('click', function() {
-        if (ik.wrapper.state && ik.wrapper.state.get('video') !== 'muted') {
-          ik.wrapper.state.set('video', 'muted');
+        if (ik.wrapper.state && ik.wrapper.state.get('video-mute') !== 1) {
+          ik.wrapper.state.set('video-mute', 1);
           $(muteToggle).addClass('active');
         } else {
-          ik.wrapper.state.set('video', 'unmuted');
+          ik.wrapper.state.set('video-mute', 0);
           $(muteToggle).removeClass('active');
         }
       });
@@ -341,7 +360,15 @@ define([
         }
       });
       reload.addEventListener('click', function () {
-        window.location.reload();
+        var version = ik.wrapper.getVersion();
+        var mute = ik.wrapper.state.get('video-mute') === 1 ? 'true' : 'false';
+        if (getUrlVar('username') && getUrlVar('password')) {
+          var username = getUrlVar('username');
+          var password = getUrlVar('password');
+          window.location.href = `http://localhost:3000/?version=${version}&username=${username}&password=${password}&mute=${mute}`;
+        } else {
+          window.location.href = `http://localhost:3000/?version=${version}&mute=${mute}`;
+        }
       });
     }
 
@@ -355,10 +382,10 @@ define([
       var hammerFrame = new Hammer(frame.get(0)); // HammerFrame for watching touch events
 
       hammerFrame.on('doubletap', function (e) {
-        if (ik.wrapper.state && ik.wrapper.state.get('video') !== 'muted') {
-          ik.wrapper.state.set('video', 'muted');
+        if (ik.wrapper.state && ik.wrapper.state.get('video-mute') === 0) {
+          ik.wrapper.state.set('video-mute', 1);
         } else {
-          ik.wrapper.state.set('video', 'unmuted');
+          ik.wrapper.state.set('video-mute', 0);
         }
       });
     }
@@ -372,7 +399,15 @@ define([
       var hammerFrame = new Hammer(frame.get(0)); // HammerFrame for watching touch events
 
       hammerFrame.on('doubletap', function (e) {
-        window.location.reload();
+        var version = ik.wrapper.getVersion();
+        var mute = ik.wrapper.state.get('video-mute') === 1 ? 'true' : 'false';
+        if (getUrlVar('username') && getUrlVar('password')) {
+          var username = getUrlVar('username');
+          var password = getUrlVar('password');
+          window.location.href = `http://localhost:3000/?version=${version}&username=${username}&password=${password}&mute=${mute}`;
+        } else {
+          window.location.href = `http://localhost:3000/?version=${version}&mute=${mute}`;
+        }
       });
     }
 
@@ -438,6 +473,7 @@ define([
         ik.wrapper.idle.current = 0;
         $('#idle-modal').hide();
         var version = ik.wrapper.getVersion();
+        var mute = ik.wrapper.state.get('video-mute') === 1 ? 'true' : 'false';
 
         // Analytics
         ik.wrapper.analytics.event('Idle Timeout', 'The kiosk has been idle for more than ' + ik.wrapper.idle.reset + ' seconds. Resetting.');
@@ -446,9 +482,9 @@ define([
         if (getUrlVar('username') && getUrlVar('password')) {
           var username = getUrlVar('username');
           var password = getUrlVar('password');
-          window.location.href = `http://localhost:3000/?version=${version}&username=${username}&password=${password}`;
+          window.location.href = `http://localhost:3000/?version=${version}&username=${username}&password=${password}&mute=${mute}`;
         } else {
-          window.location.href = `http://localhost:3000/?version=${version}`;
+          window.location.href = `http://localhost:3000/?version=${version}&mute=${mute}`;
         }
       }
     }, ik.wrapper.idle.interval);
@@ -498,6 +534,13 @@ define([
       }).then(function (response) {
         ik.map = response.map;
       });
+    }
+
+    if (getUrlVar('mute') === 'true') {
+      if (ik.wrapper.state && ik.wrapper.state.get('video-mute') === 0) {
+        ik.wrapper.state.set('video-mute', 1);
+        $(muteToggle).addClass('active');
+      }
     }
 
     if (getUrlVar('state') === 'storymap' && getUrlVar('id')) {
@@ -587,7 +630,8 @@ define([
         var regionid = ik.wrapper.state.get('regionid')
         var version = ik.wrapper.getVersion();
         var lang = ik.wrapper.state.get('language');
-        ipcRenderer.send('navigate-new-window', `http://localhost:3000/?version=${version}&state=storymap&region=${regionid}&id=${appid}&lang=${lang}`);
+        var mute = ik.wrapper.state.get('video-mute') === 1 ? 'true' : 'false';
+        ipcRenderer.send('navigate-new-window', `http://localhost:3000/?version=${version}&state=storymap&region=${regionid}&id=${appid}&lang=${lang}&mute=${mute}`);
       } else {
         // Analytics
         ik.wrapper.analytics.pageView('/storymap', 'Story Map');  

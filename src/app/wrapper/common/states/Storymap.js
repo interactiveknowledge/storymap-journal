@@ -3,7 +3,7 @@ define([], function () {
     var show = function () {
       $('.fullscreen-bg').css('background-image', 'unset');
 
-      ik.wrapper.state.set('video', 'muted');
+      ik.wrapper.state.set('video-mute', 1);
 
       $('#menu').children().hide();
       $('.menu__storymap').show();
