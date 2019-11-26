@@ -46,19 +46,15 @@ define([
      */
 
     this.renderActive = function () {
-      var renderData = layout.getInfo();
+      var render, renderData = render = layout.getInfo();
 
       var currentLanguage = ik.wrapper.state.get('language');
 
-      if (currentLanguage === 'en') {
-        renderData.h1 = 'What is LEAF?';
-        renderData.desc = 'LEAF Community Arts is a non-profit organization, building community, connecting cultures, and enriching lives through the arts - locally & globally - with festivals, community events, & arts education programs.';
-      } else {
-        renderData.h1 = '¿Qué es LEAF?';
-        renderData.desc = 'LEAF Community Arts is a non-profit organization, building community, connecting cultures, and enriching lives through the arts - locally & globally - with festivals, community events, & arts education programs.';
+      if (currentLanguage !== 'en') {
+        render = renderData.translated;
       }
 
-      $('.info__active').html(infoActiveTpl(renderData));
+      $('.info__active').html(infoActiveTpl(render));
     }
 
     this.renderAttract = function () {

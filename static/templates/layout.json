@@ -9,7 +9,12 @@
         "info": {
           "logo": "",
           "h1": "",
-          "h2": ""
+          "desc": "",
+          "translated": {
+            "h1": "",
+            "desc": "",
+            "logo": ""
+          }
         },
         "interaction": {},
         "bottom": {

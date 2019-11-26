@@ -225,9 +225,12 @@ const createLayout = (body) => {
 
   // Active section
   if (process.env.KIOSK_VERSION === 'llc') {
-    active.section.info.h1 = getHeader(cmsContent, 'title')
-    active.section.info.h2 = getHeader(cmsContent, 'field_translated_title')
+    active.section.info.h1 = cmsContent.field_state_active_title
+    active.section.info.translated.h1 = cmsContent.field_state_active_title_transla
+    active.section.info.desc = cmsContent.field_state_active_desc.value
+    active.section.info.translated.desc = cmsContent.field_state_active_desc_transla.value
     active.section.info.logo = setFile(cmsContent.field_logo.image.uri.url)
+    active.section.info.translated.logo = active.section.info.logo
 
     if (filepath = _.get(cmsContent, 'field_state_active_bg_img.image.uri.url', defaultAttractBgImg))
       active.background.img = setFile(filepath)
