@@ -533,6 +533,7 @@ define([
         }
       }).then(function (response) {
         ik.map = response.map;
+        ik.mapFirstLoad = true;
       });
     }
 
