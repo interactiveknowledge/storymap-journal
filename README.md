@@ -3,6 +3,9 @@ Story Map Journal
 
 This is the IK Wrapper version of ESRI's storymap-journal. This will be deployed for LEAF's implementation. This code introduces a Wrapper module, among many other changes, which displays a predetermined list of Story Maps.
 
+## Development moved December 2019!!
+For any additiona internal IK development please use the `project_leaf_storymap` repository for future development.
+
 ## Installing
 `yarn install`
 
